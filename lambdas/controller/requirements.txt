@@ -1,0 +1,2 @@
+# No external dependencies — stdlib + boto3 only
+# Trained models are loaded from the bundled models/ directory via pickle
