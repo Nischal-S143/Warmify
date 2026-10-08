@@ -1,0 +1,265 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Warmify — Predictive serverless concurrency system for AWS Lambda.
+  Deploys a demo function, metric collector, predictive controller,
+  DynamoDB table, and FastAPI backend.
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Timeout: 60
+    MemorySize: 256
+    Architectures:
+      - x86_64
+    Environment:
+      Variables:
+        METRICS_TABLE: !Ref WarmifyMetricsTable
+        DEMO_FUNCTION_NAME: !Ref DemoFunction
+        DEMO_FUNCTION_ALIAS: prod
+        AWS_ACCOUNT_ID: !Ref AWS::AccountId
+
+Parameters:
+  Stage:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, staging, prod]
+  MinProvisionedConcurrency:
+    Type: Number
+    Default: 1
+    Description: Minimum provisioned concurrency floor
+  MaxProvisionedConcurrency:
+    Type: Number
+    Default: 50
+    Description: Maximum provisioned concurrency budget cap
+  DeadBandThreshold:
+    Type: Number
+    Default: 2
+    Description: Ignore scaling changes smaller than this
+  ScaleDownStep:
+    Type: Number
+    Default: 1
+    Description: Maximum decrease per minute for slow scale-down
+
+Resources:
+  # ----------------------------------------------------------------
+  # 1. DynamoDB Table — warmify-metrics
+  # ----------------------------------------------------------------
+  WarmifyMetricsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: warmify-metrics
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: function_name
+          AttributeType: S
+        - AttributeName: timestamp
+          AttributeType: S
+      KeySchema:
+        - AttributeName: function_name
+          KeyType: HASH
+        - AttributeName: timestamp
+          KeyType: RANGE
+      Tags:
+        - Key: Project
+          Value: Warmify
+
+  # ----------------------------------------------------------------
+  # 2. Demo Lambda Function (with artificial cold-start weight)
+  # ----------------------------------------------------------------
+  DemoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: warmify-demo
+      Handler: app.handler
+      CodeUri: lambdas/demo/
+      MemorySize: 512
+      Timeout: 30
+      Description: Demo function with artificial cold-start weight for benchmarking.
+      AutoPublishAlias: prod
+      ProvisionedConcurrencyConfig:
+        ProvisionedConcurrentExecutions: 1
+      FunctionUrlConfig:
+        AuthType: NONE
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*'
+
+  # ----------------------------------------------------------------
+  # 3. Collector Lambda — reads CloudWatch, writes to DynamoDB
+  # ----------------------------------------------------------------
+  CollectorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: warmify-collector
+      Handler: app.handler
+      CodeUri: lambdas/collector/
+      Timeout: 120
+      Description: Collects CloudWatch metrics for the demo function every minute.
+      Environment:
+        Variables:
+          MIN_PC: !Ref MinProvisionedConcurrency
+          MAX_PC: !Ref MaxProvisionedConcurrency
+      Events:
+        EveryMinute:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 minute)
+            Description: Trigger metric collection every minute
+            Enabled: true
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - cloudwatch:GetMetricData
+                - cloudwatch:GetMetricStatistics
+                - cloudwatch:ListMetrics
+              Resource: '*'
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+                - dynamodb:GetItem
+                - dynamodb:Query
+              Resource: !GetAtt WarmifyMetricsTable.Arn
+            - Effect: Allow
+              Action:
+                - lambda:GetFunctionConfiguration
+                - lambda:GetAlias
+                - lambda:GetProvisionedConcurrencyConfig
+              Resource:
+                - !GetAtt DemoFunction.Arn
+                - !Sub '${DemoFunction.Arn}:*'
+            - Effect: Allow
+              Action:
+                - logs:FilterLogEvents
+                - logs:GetLogEvents
+                - logs:DescribeLogStreams
+              Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/warmify-demo:*'
+
+  # ----------------------------------------------------------------
+  # 4. Controller Lambda — predictive scaling
+  # ----------------------------------------------------------------
+  ControllerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: warmify-controller
+      Handler: app.handler
+      CodeUri: lambdas/controller/
+      MemorySize: 512
+      Timeout: 120
+      Description: Predictive controller that forecasts traffic and adjusts provisioned concurrency.
+      Environment:
+        Variables:
+          MIN_PC: !Ref MinProvisionedConcurrency
+          MAX_PC: !Ref MaxProvisionedConcurrency
+          DEAD_BAND: !Ref DeadBandThreshold
+          SCALE_DOWN_STEP: !Ref ScaleDownStep
+      Events:
+        EveryMinute:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 minute)
+            Description: Trigger predictive scaling every minute
+            Enabled: true
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+                - dynamodb:GetItem
+                - dynamodb:Query
+              Resource: !GetAtt WarmifyMetricsTable.Arn
+            - Effect: Allow
+              Action:
+                - lambda:PutProvisionedConcurrencyConfig
+                - lambda:GetProvisionedConcurrencyConfig
+                - lambda:GetAlias
+              Resource:
+                - !GetAtt DemoFunction.Arn
+                - !Sub '${DemoFunction.Arn}:*'
+
+  # ----------------------------------------------------------------
+  # 5. FastAPI Backend Lambda
+  # ----------------------------------------------------------------
+  FastAPIFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: warmify-api
+      Handler: app.handler
+      CodeUri: lambdas/api/
+      MemorySize: 512
+      Timeout: 30
+      Description: FastAPI backend serving the Warmify dashboard.
+      FunctionUrlConfig:
+        AuthType: NONE
+      Events:
+        ApiCatchAll:
+          Type: HttpApi
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+        ApiRoot:
+          Type: HttpApi
+          Properties:
+            Path: /
+            Method: ANY
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:GetItem
+                - dynamodb:Query
+                - dynamodb:Scan
+              Resource: !GetAtt WarmifyMetricsTable.Arn
+            - Effect: Allow
+              Action:
+                - lambda:GetFunctionConfiguration
+                - lambda:GetAlias
+                - lambda:GetProvisionedConcurrencyConfig
+              Resource:
+                - !GetAtt DemoFunction.Arn
+                - !Sub '${DemoFunction.Arn}:*'
+            - Effect: Allow
+              Action:
+                - cloudwatch:GetMetricData
+                - cloudwatch:GetMetricStatistics
+              Resource: '*'
+            - Effect: Allow
+              Action:
+                - lambda:GetFunction
+              Resource:
+                - !GetAtt CollectorFunction.Arn
+                - !GetAtt ControllerFunction.Arn
+            - Effect: Allow
+              Action:
+                - dynamodb:DescribeTable
+              Resource: !GetAtt WarmifyMetricsTable.Arn
+
+Outputs:
+  DemoFunctionUrl:
+    Description: URL for the demo Lambda function
+    Value: !GetAtt DemoFunctionUrl.FunctionUrl
+  DemoFunctionArn:
+    Description: ARN of the demo Lambda function
+    Value: !GetAtt DemoFunction.Arn
+  ApiEndpoint:
+    Description: HTTP API Gateway endpoint for Warmify API
+    Value: !Sub 'https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com'
+  MetricsTableName:
+    Description: DynamoDB table name
+    Value: !Ref WarmifyMetricsTable
+  CollectorFunctionArn:
+    Description: ARN of the collector function
+    Value: !GetAtt CollectorFunction.Arn
+  ControllerFunctionArn:
+    Description: ARN of the controller function
+    Value: !GetAtt ControllerFunction.Arn

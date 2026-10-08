@@ -1,0 +1,13 @@
+version = 0.1
+[default.deploy.parameters]
+stack_name = "warmify"
+resolve_s3 = true
+s3_prefix = "warmify"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "Stage=dev MinProvisionedConcurrency=1 MaxProvisionedConcurrency=50 DeadBandThreshold=2 ScaleDownStep=1"
+tags = "Project=\"Warmify\" Environment=\"dev\""
+
+[default.build.parameters]
+use_container = false
