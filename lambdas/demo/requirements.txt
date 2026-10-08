@@ -1,0 +1,1 @@
+# No external dependencies — stdlib + boto3 only
