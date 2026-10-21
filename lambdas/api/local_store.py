@@ -472,3 +472,11 @@ def run_controller_cycle(quantile="q90"):
     save_local_data(data)
     return decision
 
+
+def save_evaluations(eval_list):
+    """Save or update benchmark evaluation records in local JSON store."""
+    data = get_local_data()
+    data["evaluations"] = eval_list
+    save_local_data(data)
+    return eval_list
+
