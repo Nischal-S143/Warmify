@@ -21,7 +21,10 @@ from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 from pathlib import Path
 
-import boto3
+try:
+    import boto3
+except ImportError:
+    boto3 = None
 
 # ── Configuration ────────────────────────────────────────────────────
 TABLE_NAME = os.environ.get("METRICS_TABLE", "warmify-metrics")
@@ -31,6 +34,7 @@ MIN_PC = int(os.environ.get("MIN_PC", "1"))
 MAX_PC = int(os.environ.get("MAX_PC", "50"))
 DEAD_BAND = int(os.environ.get("DEAD_BAND", "2"))
 SCALE_DOWN_STEP = int(os.environ.get("SCALE_DOWN_STEP", "1"))
+TARGET_QUANTILE = os.environ.get("TARGET_QUANTILE", "q90").lower()
 
 # Forecast horizon in minutes
 FORECAST_HORIZON = 10
@@ -38,9 +42,17 @@ FORECAST_HORIZON = 10
 HISTORY_WINDOW = 90
 
 # ── Clients ──────────────────────────────────────────────────────────
-dynamodb = boto3.resource("dynamodb")
-lambda_client = boto3.client("lambda")
-table = dynamodb.Table(TABLE_NAME)
+dynamodb = None
+lambda_client = None
+table = None
+
+if boto3 is not None:
+    try:
+        dynamodb = boto3.resource("dynamodb")
+        lambda_client = boto3.client("lambda")
+        table = dynamodb.Table(TABLE_NAME)
+    except Exception:
+        pass
 
 # ── Model loading ────────────────────────────────────────────────────
 MODEL_DIR = Path(__file__).parent / "models"
@@ -65,6 +77,29 @@ _load_models()
 
 
 # ── Feature engineering ──────────────────────────────────────────────
+FEATURE_NAMES = [
+    "lag_1", "lag_5", "lag_15", "lag_60",
+    "rolling_avg_15",
+    "sin_time", "cos_time",
+    "day_of_week",
+]
+
+
+def _littles_law(predicted_rpm: float, avg_duration_sec: float, safety_margin: float = 1.0) -> int:
+    """Apply Little's Law: Concurrency = Arrival Rate (req/sec) * Service Time (sec)."""
+    rps = float(predicted_rpm) / 60.0
+    copies = math.ceil(rps * float(avg_duration_sec) * float(safety_margin))
+    return max(1, copies)
+
+
+def _encode_time(dt: datetime):
+    """Cyclical time-of-day encoding into sine and cosine."""
+    minutes_of_day = dt.hour * 60 + dt.minute
+    sin_time = math.sin(2 * math.pi * minutes_of_day / 1440)
+    cos_time = math.cos(2 * math.pi * minutes_of_day / 1440)
+    return round(sin_time, 6), round(cos_time, 6)
+
+
 def _build_features(history):
     """
     Build feature vector from the most recent metrics history.
@@ -101,9 +136,7 @@ def _build_features(history):
 
     # Time-of-day encoding
     now = datetime.now(timezone.utc)
-    minutes_of_day = now.hour * 60 + now.minute
-    sin_time = math.sin(2 * math.pi * minutes_of_day / 1440)
-    cos_time = math.cos(2 * math.pi * minutes_of_day / 1440)
+    sin_time, cos_time = _encode_time(now)
     day_of_week = now.weekday()
 
     features = {
@@ -203,12 +236,12 @@ def _get_current_provisioned():
         return 0
 
 
-def _apply_guardrails(raw_copies, current_copies):
+def _apply_guardrails(raw_copies, current_copies, cold_starts_recent=0):
     """
     Apply scaling guardrails:
       - min floor
       - max budget cap
-      - dead-band (ignore changes smaller than threshold)
+      - dead-band (ignore changes smaller than threshold, unless cold-starts detected)
       - slow scale-down (decrease by at most SCALE_DOWN_STEP per minute)
 
     Returns (final_copies, list_of_guardrail_reasons).
@@ -226,9 +259,11 @@ def _apply_guardrails(raw_copies, current_copies):
         target = MAX_PC
         reasons.append(f"cap_applied: {raw_copies}→{MAX_PC}")
 
-    # 3. Dead-band: if the change is too small, keep current
+    # 3. Dead-band: if change is small, keep current (unless cold starts recently detected)
     delta = abs(target - current_copies)
-    if 0 < delta < DEAD_BAND and target != MIN_PC:
+    if cold_starts_recent > 0 and target > current_copies:
+        reasons.append(f"cold-start surge override: {cold_starts_recent} cold starts detected")
+    elif current_copies > 0 and 0 < delta < DEAD_BAND and target != MIN_PC:
         reasons.append(
             f"dead_band: Δ={delta}<{DEAD_BAND}, keeping {current_copies}"
         )
@@ -239,7 +274,7 @@ def _apply_guardrails(raw_copies, current_copies):
         max_decrease = current_copies - SCALE_DOWN_STEP
         if target < max_decrease:
             reasons.append(
-                f"slow_scale_down: wanted {target}, "
+                f"gradual scale-down: wanted {target}, "
                 f"limiting to {max_decrease} (step={SCALE_DOWN_STEP})"
             )
             target = max(max_decrease, MIN_PC)
@@ -350,8 +385,9 @@ def handler(event, context):
     print(f"[INFO] Predictions ({prediction_source}): {json.dumps(predictions)}")
 
     # ── 4. Little's Law ──────────────────────────────────────────────
-    # Use Q90 as default quantile for provisioning
-    quantile_used = "q90"
+    # Use configured target quantile (default q90)
+    target_q = os.environ.get("TARGET_QUANTILE", TARGET_QUANTILE).lower()
+    quantile_used = target_q if target_q in predictions and predictions[target_q] is not None else "q90"
     predicted_invocations = predictions[quantile_used]
     predicted_rps = predicted_invocations / 60.0  # invocations per minute → per sec
     avg_duration_sec = _get_avg_duration(history)
