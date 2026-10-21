@@ -33,3 +33,18 @@ Thumbs.db
 # Secrets
 *.env
 .env.*
+
+# External reference PDFs and report generation artifacts
+TraceRCA*.pdf
+Warmify_Project_Report*
+Warmify_Presentation_Notes.md
+build_full_report.py
+convert_to_pdf.py
+generate_*.py
+generate_*_figure.py
+report_helpers.py
+cover_extracted.jpeg
+gla_*.png
+report_figures/
+
+

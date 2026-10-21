@@ -142,57 +142,64 @@ Set your frontend's API base URL to the returned value. The API serves CORS head
 NEXT_PUBLIC_API_URL=https://abc123.execute-api.us-east-1.amazonaws.com
 ```
 
-## Local Development
+## Local Development & Testing
 
-### Run FastAPI Locally
+### 1. Run the Full Warmify System Locally (1 Command)
+
+Runs local simulation, Little's Law controller cycle, and launches the mission control dashboard on http://127.0.0.1:8000:
+
+```bash
+python scripts/run_local.py
+```
+
+### 2. Run Automated Test Suite
+
+Warmify includes a comprehensive 17-test automated test suite covering controller predictive scaling, guardrail envelopes, FastAPI endpoints, and local store providers:
+
+```bash
+pytest tests/
+```
+
+### 3. Run FastAPI Directly
 
 ```bash
 pip install -r requirements.txt
-
-# Set environment variables
-export METRICS_TABLE=warmify-metrics
-export DEMO_FUNCTION_NAME=warmify-demo
-export DEMO_FUNCTION_ALIAS=prod
-export AWS_REGION=us-east-1
-
-# Start the dev server
-cd lambdas/api
-uvicorn app:app --reload --port 8000
-```
-
-### Run SAM Local
-
-```bash
-# Start all functions locally
-sam local start-api
-
-# Invoke a single function
-sam local invoke CollectorFunction
+export WARMIFY_LOCAL_MODE=1
+uvicorn lambdas.api.app:app --reload --port 8000
 ```
 
 ## Project Structure
 
 ```
 Warmify/
-├── template.yaml              # SAM template (all infrastructure)
+├── template.yaml              # SAM template (all infrastructure & TargetQuantile parameter)
 ├── samconfig.toml             # SAM deploy configuration
-├── requirements.txt           # Dev dependencies
-├── README.md
+├── requirements.txt           # Python dependencies
+├── README.md                  # Project documentation
+├── data/
+│   └── warmify_local_data.json # Seeded historical metrics & 6-arm benchmark results
+├── frontend/                  # Compiled production web dashboard distribution
+├── ui/                        # React + Vite mission control source code
+├── tests/                     # Automated unit and integration test suite (17 tests)
+│   ├── test_controller.py     # Little's Law, feature engineering & guardrail tests
+│   ├── test_api.py            # FastAPI endpoints test client validation
+│   └── test_local_store.py    # Local store & controller simulation tests
 ├── lambdas/
 │   ├── demo/
-│   │   └── app.py             # Demo function (cold-start weight)
+│   │   └── app.py             # Demo function (artificial cold-start weight)
 │   ├── collector/
-│   │   └── app.py             # CloudWatch → DynamoDB collector
+│   │   └── app.py             # CloudWatch → DynamoDB metric collector
 │   ├── controller/
-│   │   ├── app.py             # Predictive scaling controller
-│   │   └── models/            # Trained .pkl model artifacts
+│   │   ├── app.py             # Predictive scaling controller (Little's Law + Guardrails)
+│   │   └── models/            # Trained .pkl quantile model artifacts (Q50, Q90, Q95)
 │   └── api/
-│       ├── app.py             # FastAPI backend (4 endpoints)
-│       └── requirements.txt   # fastapi + mangum
+│       ├── app.py             # FastAPI backend (timeline, scaling, evaluation, health)
+│       └── local_store.py     # Local JSON store & simulation provider
 └── scripts/
     ├── load_generator.py      # Daily traffic pattern simulator
-    ├── train_model.py         # Quantile model training + validation
-    └── evaluation_harness.py  # A/B test across 6 experiment arms
+    ├── train_model.py         # Quantile model training with --local mode
+    ├── run_local.py           # Unified local simulation runner & dashboard server
+    └── evaluation_harness.py  # A/B benchmark evaluation across 6 experiment arms
 ```
 
 ## Configuration

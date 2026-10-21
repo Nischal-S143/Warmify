@@ -2,7 +2,7 @@
   "metrics": [
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:38:19Z",
+      "timestamp": "2026-10-21T05:54:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 43.5,
@@ -11,11 +11,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 6,
-      "collected_at": "2026-10-21T05:38:19Z"
+      "collected_at": "2026-10-21T05:54:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:39:19Z",
+      "timestamp": "2026-10-21T05:55:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 46.9,
@@ -24,11 +24,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T05:39:19Z"
+      "collected_at": "2026-10-21T05:55:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:40:19Z",
+      "timestamp": "2026-10-21T05:56:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 38.6,
@@ -37,11 +37,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T05:40:19Z"
+      "collected_at": "2026-10-21T05:56:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:41:19Z",
+      "timestamp": "2026-10-21T05:57:12Z",
       "record_type": "metric",
       "invocations": 6,
       "avg_duration_ms": 45.8,
@@ -50,11 +50,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T05:41:19Z"
+      "collected_at": "2026-10-21T05:57:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:42:19Z",
+      "timestamp": "2026-10-21T05:58:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 46.0,
@@ -63,11 +63,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T05:42:19Z"
+      "collected_at": "2026-10-21T05:58:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:43:19Z",
+      "timestamp": "2026-10-21T05:59:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 44.1,
@@ -76,11 +76,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T05:43:19Z"
+      "collected_at": "2026-10-21T05:59:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:44:19Z",
+      "timestamp": "2026-10-21T06:00:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 41.3,
@@ -89,11 +89,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T05:44:19Z"
+      "collected_at": "2026-10-21T06:00:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:45:19Z",
+      "timestamp": "2026-10-21T06:01:12Z",
       "record_type": "metric",
       "invocations": 6,
       "avg_duration_ms": 39.2,
@@ -102,11 +102,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T05:45:19Z"
+      "collected_at": "2026-10-21T06:01:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:46:19Z",
+      "timestamp": "2026-10-21T06:02:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 38.4,
@@ -115,11 +115,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T05:46:19Z"
+      "collected_at": "2026-10-21T06:02:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:47:19Z",
+      "timestamp": "2026-10-21T06:03:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 44.0,
@@ -128,11 +128,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T05:47:19Z"
+      "collected_at": "2026-10-21T06:03:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:48:19Z",
+      "timestamp": "2026-10-21T06:04:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 40.7,
@@ -141,11 +141,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T05:48:19Z"
+      "collected_at": "2026-10-21T06:04:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:49:19Z",
+      "timestamp": "2026-10-21T06:05:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 41.2,
@@ -154,11 +154,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T05:49:19Z"
+      "collected_at": "2026-10-21T06:05:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:50:19Z",
+      "timestamp": "2026-10-21T06:06:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 43.8,
@@ -167,11 +167,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T05:50:19Z"
+      "collected_at": "2026-10-21T06:06:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:51:19Z",
+      "timestamp": "2026-10-21T06:07:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 47.9,
@@ -180,11 +180,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T05:51:19Z"
+      "collected_at": "2026-10-21T06:07:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:52:19Z",
+      "timestamp": "2026-10-21T06:08:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 41.1,
@@ -193,11 +193,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T05:52:19Z"
+      "collected_at": "2026-10-21T06:08:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:53:19Z",
+      "timestamp": "2026-10-21T06:09:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 39.3,
@@ -206,11 +206,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T05:53:19Z"
+      "collected_at": "2026-10-21T06:09:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:54:19Z",
+      "timestamp": "2026-10-21T06:10:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 42.4,
@@ -219,11 +219,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T05:54:19Z"
+      "collected_at": "2026-10-21T06:10:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:55:19Z",
+      "timestamp": "2026-10-21T06:11:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 40.0,
@@ -232,11 +232,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T05:55:19Z"
+      "collected_at": "2026-10-21T06:11:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:56:19Z",
+      "timestamp": "2026-10-21T06:12:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 42.5,
@@ -245,11 +245,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T05:56:19Z"
+      "collected_at": "2026-10-21T06:12:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:57:19Z",
+      "timestamp": "2026-10-21T06:13:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 42.6,
@@ -258,11 +258,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T05:57:19Z"
+      "collected_at": "2026-10-21T06:13:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:58:19Z",
+      "timestamp": "2026-10-21T06:14:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 47.5,
@@ -271,11 +271,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T05:58:19Z"
+      "collected_at": "2026-10-21T06:14:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T05:59:19Z",
+      "timestamp": "2026-10-21T06:15:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 47.8,
@@ -284,11 +284,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T05:59:19Z"
+      "collected_at": "2026-10-21T06:15:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:00:19Z",
+      "timestamp": "2026-10-21T06:16:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 40.2,
@@ -297,11 +297,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:00:19Z"
+      "collected_at": "2026-10-21T06:16:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:01:19Z",
+      "timestamp": "2026-10-21T06:17:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 45.1,
@@ -310,11 +310,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:01:19Z"
+      "collected_at": "2026-10-21T06:17:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:02:19Z",
+      "timestamp": "2026-10-21T06:18:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 41.2,
@@ -323,11 +323,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:02:19Z"
+      "collected_at": "2026-10-21T06:18:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:03:19Z",
+      "timestamp": "2026-10-21T06:19:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 47.2,
@@ -336,11 +336,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:03:19Z"
+      "collected_at": "2026-10-21T06:19:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:04:19Z",
+      "timestamp": "2026-10-21T06:20:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 46.8,
@@ -349,11 +349,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:04:19Z"
+      "collected_at": "2026-10-21T06:20:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:05:19Z",
+      "timestamp": "2026-10-21T06:21:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 40.9,
@@ -362,11 +362,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:05:19Z"
+      "collected_at": "2026-10-21T06:21:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:06:19Z",
+      "timestamp": "2026-10-21T06:22:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 45.4,
@@ -375,11 +375,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:06:19Z"
+      "collected_at": "2026-10-21T06:22:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:07:19Z",
+      "timestamp": "2026-10-21T06:23:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 42.5,
@@ -388,11 +388,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:07:19Z"
+      "collected_at": "2026-10-21T06:23:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:08:19Z",
+      "timestamp": "2026-10-21T06:24:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 39.6,
@@ -401,11 +401,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:08:19Z"
+      "collected_at": "2026-10-21T06:24:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:09:19Z",
+      "timestamp": "2026-10-21T06:25:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 40.4,
@@ -414,11 +414,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:09:19Z"
+      "collected_at": "2026-10-21T06:25:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:10:19Z",
+      "timestamp": "2026-10-21T06:26:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 43.7,
@@ -427,11 +427,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:10:19Z"
+      "collected_at": "2026-10-21T06:26:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:11:19Z",
+      "timestamp": "2026-10-21T06:27:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 40.5,
@@ -440,11 +440,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:11:19Z"
+      "collected_at": "2026-10-21T06:27:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:12:19Z",
+      "timestamp": "2026-10-21T06:28:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 41.2,
@@ -453,11 +453,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:12:19Z"
+      "collected_at": "2026-10-21T06:28:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:13:19Z",
+      "timestamp": "2026-10-21T06:29:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 43.8,
@@ -466,11 +466,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:13:19Z"
+      "collected_at": "2026-10-21T06:29:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:14:19Z",
+      "timestamp": "2026-10-21T06:30:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 40.9,
@@ -479,11 +479,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:14:19Z"
+      "collected_at": "2026-10-21T06:30:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:15:19Z",
+      "timestamp": "2026-10-21T06:31:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 44.2,
@@ -492,11 +492,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:15:19Z"
+      "collected_at": "2026-10-21T06:31:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:16:19Z",
+      "timestamp": "2026-10-21T06:32:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 41.2,
@@ -505,11 +505,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:16:19Z"
+      "collected_at": "2026-10-21T06:32:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:17:19Z",
+      "timestamp": "2026-10-21T06:33:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 47.9,
@@ -518,11 +518,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:17:19Z"
+      "collected_at": "2026-10-21T06:33:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:18:19Z",
+      "timestamp": "2026-10-21T06:34:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 42.6,
@@ -531,11 +531,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:18:19Z"
+      "collected_at": "2026-10-21T06:34:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:19:19Z",
+      "timestamp": "2026-10-21T06:35:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 45.4,
@@ -544,11 +544,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:19:19Z"
+      "collected_at": "2026-10-21T06:35:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:20:19Z",
+      "timestamp": "2026-10-21T06:36:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 47.9,
@@ -557,11 +557,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:20:19Z"
+      "collected_at": "2026-10-21T06:36:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:21:19Z",
+      "timestamp": "2026-10-21T06:37:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 38.9,
@@ -570,11 +570,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:21:19Z"
+      "collected_at": "2026-10-21T06:37:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:22:19Z",
+      "timestamp": "2026-10-21T06:38:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 46.7,
@@ -583,11 +583,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:22:19Z"
+      "collected_at": "2026-10-21T06:38:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:23:19Z",
+      "timestamp": "2026-10-21T06:39:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 44.7,
@@ -596,11 +596,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:23:19Z"
+      "collected_at": "2026-10-21T06:39:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:24:19Z",
+      "timestamp": "2026-10-21T06:40:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 43.1,
@@ -609,11 +609,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:24:19Z"
+      "collected_at": "2026-10-21T06:40:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:25:19Z",
+      "timestamp": "2026-10-21T06:41:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 40.7,
@@ -622,11 +622,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:25:19Z"
+      "collected_at": "2026-10-21T06:41:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:26:19Z",
+      "timestamp": "2026-10-21T06:42:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 42.1,
@@ -635,11 +635,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:26:19Z"
+      "collected_at": "2026-10-21T06:42:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:27:19Z",
+      "timestamp": "2026-10-21T06:43:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 41.7,
@@ -648,11 +648,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:27:19Z"
+      "collected_at": "2026-10-21T06:43:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:28:19Z",
+      "timestamp": "2026-10-21T06:44:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 45.7,
@@ -661,11 +661,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:28:19Z"
+      "collected_at": "2026-10-21T06:44:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:29:19Z",
+      "timestamp": "2026-10-21T06:45:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 41.4,
@@ -674,11 +674,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:29:19Z"
+      "collected_at": "2026-10-21T06:45:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:30:19Z",
+      "timestamp": "2026-10-21T06:46:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 44.7,
@@ -687,11 +687,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:30:19Z"
+      "collected_at": "2026-10-21T06:46:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:31:19Z",
+      "timestamp": "2026-10-21T06:47:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 45.5,
@@ -700,11 +700,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:31:19Z"
+      "collected_at": "2026-10-21T06:47:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:32:19Z",
+      "timestamp": "2026-10-21T06:48:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 43.9,
@@ -713,11 +713,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:32:19Z"
+      "collected_at": "2026-10-21T06:48:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:33:19Z",
+      "timestamp": "2026-10-21T06:49:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 45.3,
@@ -726,11 +726,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:33:19Z"
+      "collected_at": "2026-10-21T06:49:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:34:19Z",
+      "timestamp": "2026-10-21T06:50:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 46.8,
@@ -739,11 +739,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:34:19Z"
+      "collected_at": "2026-10-21T06:50:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:35:19Z",
+      "timestamp": "2026-10-21T06:51:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 40.6,
@@ -752,11 +752,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:35:19Z"
+      "collected_at": "2026-10-21T06:51:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:36:19Z",
+      "timestamp": "2026-10-21T06:52:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 46.1,
@@ -765,11 +765,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:36:19Z"
+      "collected_at": "2026-10-21T06:52:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:37:19Z",
+      "timestamp": "2026-10-21T06:53:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 44.3,
@@ -778,11 +778,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:37:19Z"
+      "collected_at": "2026-10-21T06:53:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:38:19Z",
+      "timestamp": "2026-10-21T06:54:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 38.6,
@@ -791,11 +791,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:38:19Z"
+      "collected_at": "2026-10-21T06:54:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:39:19Z",
+      "timestamp": "2026-10-21T06:55:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 48.0,
@@ -804,11 +804,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:39:19Z"
+      "collected_at": "2026-10-21T06:55:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:40:19Z",
+      "timestamp": "2026-10-21T06:56:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 38.8,
@@ -817,11 +817,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:40:19Z"
+      "collected_at": "2026-10-21T06:56:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:41:19Z",
+      "timestamp": "2026-10-21T06:57:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 47.6,
@@ -830,11 +830,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:41:19Z"
+      "collected_at": "2026-10-21T06:57:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:42:19Z",
+      "timestamp": "2026-10-21T06:58:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 45.2,
@@ -843,11 +843,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:42:19Z"
+      "collected_at": "2026-10-21T06:58:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:43:19Z",
+      "timestamp": "2026-10-21T06:59:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 42.0,
@@ -856,11 +856,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:43:19Z"
+      "collected_at": "2026-10-21T06:59:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:44:19Z",
+      "timestamp": "2026-10-21T07:00:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 44.9,
@@ -869,11 +869,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:44:19Z"
+      "collected_at": "2026-10-21T07:00:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:45:19Z",
+      "timestamp": "2026-10-21T07:01:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 46.0,
@@ -882,11 +882,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:45:19Z"
+      "collected_at": "2026-10-21T07:01:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:46:19Z",
+      "timestamp": "2026-10-21T07:02:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 45.9,
@@ -895,11 +895,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:46:19Z"
+      "collected_at": "2026-10-21T07:02:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:47:19Z",
+      "timestamp": "2026-10-21T07:03:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 39.9,
@@ -908,11 +908,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:47:19Z"
+      "collected_at": "2026-10-21T07:03:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:48:19Z",
+      "timestamp": "2026-10-21T07:04:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 39.9,
@@ -921,11 +921,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:48:19Z"
+      "collected_at": "2026-10-21T07:04:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:49:19Z",
+      "timestamp": "2026-10-21T07:05:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 42.1,
@@ -934,11 +934,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:49:19Z"
+      "collected_at": "2026-10-21T07:05:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:50:19Z",
+      "timestamp": "2026-10-21T07:06:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 43.5,
@@ -947,11 +947,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:50:19Z"
+      "collected_at": "2026-10-21T07:06:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:51:19Z",
+      "timestamp": "2026-10-21T07:07:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 42.8,
@@ -960,11 +960,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:51:19Z"
+      "collected_at": "2026-10-21T07:07:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:52:19Z",
+      "timestamp": "2026-10-21T07:08:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 44.8,
@@ -973,11 +973,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:52:19Z"
+      "collected_at": "2026-10-21T07:08:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:53:19Z",
+      "timestamp": "2026-10-21T07:09:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 40.2,
@@ -986,11 +986,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:53:19Z"
+      "collected_at": "2026-10-21T07:09:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:54:19Z",
+      "timestamp": "2026-10-21T07:10:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 46.2,
@@ -999,11 +999,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:54:19Z"
+      "collected_at": "2026-10-21T07:10:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:55:19Z",
+      "timestamp": "2026-10-21T07:11:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 47.2,
@@ -1012,11 +1012,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:55:19Z"
+      "collected_at": "2026-10-21T07:11:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:56:19Z",
+      "timestamp": "2026-10-21T07:12:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 40.1,
@@ -1025,11 +1025,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:56:19Z"
+      "collected_at": "2026-10-21T07:12:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:57:19Z",
+      "timestamp": "2026-10-21T07:13:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 39.3,
@@ -1038,11 +1038,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:57:19Z"
+      "collected_at": "2026-10-21T07:13:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:58:19Z",
+      "timestamp": "2026-10-21T07:14:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 45.5,
@@ -1051,11 +1051,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:58:19Z"
+      "collected_at": "2026-10-21T07:14:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T06:59:19Z",
+      "timestamp": "2026-10-21T07:15:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 42.5,
@@ -1064,11 +1064,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T06:59:19Z"
+      "collected_at": "2026-10-21T07:15:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:00:19Z",
+      "timestamp": "2026-10-21T07:16:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 41.2,
@@ -1077,11 +1077,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:00:19Z"
+      "collected_at": "2026-10-21T07:16:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:01:19Z",
+      "timestamp": "2026-10-21T07:17:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 46.4,
@@ -1090,11 +1090,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:01:19Z"
+      "collected_at": "2026-10-21T07:17:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:02:19Z",
+      "timestamp": "2026-10-21T07:18:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 40.5,
@@ -1103,11 +1103,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:02:19Z"
+      "collected_at": "2026-10-21T07:18:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:03:19Z",
+      "timestamp": "2026-10-21T07:19:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 44.2,
@@ -1116,11 +1116,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:03:19Z"
+      "collected_at": "2026-10-21T07:19:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:04:19Z",
+      "timestamp": "2026-10-21T07:20:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 38.3,
@@ -1129,11 +1129,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:04:19Z"
+      "collected_at": "2026-10-21T07:20:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:05:19Z",
+      "timestamp": "2026-10-21T07:21:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 43.6,
@@ -1142,11 +1142,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:05:19Z"
+      "collected_at": "2026-10-21T07:21:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:06:19Z",
+      "timestamp": "2026-10-21T07:22:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 43.5,
@@ -1155,11 +1155,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:06:19Z"
+      "collected_at": "2026-10-21T07:22:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:07:19Z",
+      "timestamp": "2026-10-21T07:23:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 47.6,
@@ -1168,11 +1168,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:07:19Z"
+      "collected_at": "2026-10-21T07:23:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:08:19Z",
+      "timestamp": "2026-10-21T07:24:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 40.1,
@@ -1181,11 +1181,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:08:19Z"
+      "collected_at": "2026-10-21T07:24:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:09:19Z",
+      "timestamp": "2026-10-21T07:25:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 45.1,
@@ -1194,11 +1194,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:09:19Z"
+      "collected_at": "2026-10-21T07:25:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:10:19Z",
+      "timestamp": "2026-10-21T07:26:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 47.3,
@@ -1207,11 +1207,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:10:19Z"
+      "collected_at": "2026-10-21T07:26:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:11:19Z",
+      "timestamp": "2026-10-21T07:27:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 42.5,
@@ -1220,11 +1220,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:11:19Z"
+      "collected_at": "2026-10-21T07:27:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:12:19Z",
+      "timestamp": "2026-10-21T07:28:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 38.7,
@@ -1233,11 +1233,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:12:19Z"
+      "collected_at": "2026-10-21T07:28:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:13:19Z",
+      "timestamp": "2026-10-21T07:29:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 46.9,
@@ -1246,11 +1246,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:13:19Z"
+      "collected_at": "2026-10-21T07:29:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:14:19Z",
+      "timestamp": "2026-10-21T07:30:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 40.2,
@@ -1259,11 +1259,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:14:19Z"
+      "collected_at": "2026-10-21T07:30:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:15:19Z",
+      "timestamp": "2026-10-21T07:31:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 44.9,
@@ -1272,11 +1272,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:15:19Z"
+      "collected_at": "2026-10-21T07:31:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:16:19Z",
+      "timestamp": "2026-10-21T07:32:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 46.4,
@@ -1285,11 +1285,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:16:19Z"
+      "collected_at": "2026-10-21T07:32:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:17:19Z",
+      "timestamp": "2026-10-21T07:33:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 42.6,
@@ -1298,11 +1298,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:17:19Z"
+      "collected_at": "2026-10-21T07:33:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:18:19Z",
+      "timestamp": "2026-10-21T07:34:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 39.3,
@@ -1311,11 +1311,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:18:19Z"
+      "collected_at": "2026-10-21T07:34:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:19:19Z",
+      "timestamp": "2026-10-21T07:35:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 48.0,
@@ -1324,11 +1324,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:19:19Z"
+      "collected_at": "2026-10-21T07:35:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:20:19Z",
+      "timestamp": "2026-10-21T07:36:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 46.2,
@@ -1337,11 +1337,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:20:19Z"
+      "collected_at": "2026-10-21T07:36:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:21:19Z",
+      "timestamp": "2026-10-21T07:37:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 46.3,
@@ -1350,11 +1350,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:21:19Z"
+      "collected_at": "2026-10-21T07:37:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:22:19Z",
+      "timestamp": "2026-10-21T07:38:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 38.8,
@@ -1363,11 +1363,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:22:19Z"
+      "collected_at": "2026-10-21T07:38:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:23:19Z",
+      "timestamp": "2026-10-21T07:39:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 47.6,
@@ -1376,11 +1376,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:23:19Z"
+      "collected_at": "2026-10-21T07:39:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:24:19Z",
+      "timestamp": "2026-10-21T07:40:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 47.8,
@@ -1389,11 +1389,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:24:19Z"
+      "collected_at": "2026-10-21T07:40:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:25:19Z",
+      "timestamp": "2026-10-21T07:41:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 40.6,
@@ -1402,11 +1402,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:25:19Z"
+      "collected_at": "2026-10-21T07:41:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:26:19Z",
+      "timestamp": "2026-10-21T07:42:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 38.4,
@@ -1415,11 +1415,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:26:19Z"
+      "collected_at": "2026-10-21T07:42:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:27:19Z",
+      "timestamp": "2026-10-21T07:43:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 46.5,
@@ -1428,11 +1428,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:27:19Z"
+      "collected_at": "2026-10-21T07:43:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:28:19Z",
+      "timestamp": "2026-10-21T07:44:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 46.4,
@@ -1441,11 +1441,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:28:19Z"
+      "collected_at": "2026-10-21T07:44:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:29:19Z",
+      "timestamp": "2026-10-21T07:45:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 41.3,
@@ -1454,11 +1454,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:29:19Z"
+      "collected_at": "2026-10-21T07:45:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:30:19Z",
+      "timestamp": "2026-10-21T07:46:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 42.0,
@@ -1467,11 +1467,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:30:19Z"
+      "collected_at": "2026-10-21T07:46:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:31:19Z",
+      "timestamp": "2026-10-21T07:47:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 44.1,
@@ -1480,11 +1480,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:31:19Z"
+      "collected_at": "2026-10-21T07:47:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:32:19Z",
+      "timestamp": "2026-10-21T07:48:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 38.1,
@@ -1493,11 +1493,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:32:19Z"
+      "collected_at": "2026-10-21T07:48:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:33:19Z",
+      "timestamp": "2026-10-21T07:49:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 39.8,
@@ -1506,11 +1506,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:33:19Z"
+      "collected_at": "2026-10-21T07:49:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:34:19Z",
+      "timestamp": "2026-10-21T07:50:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 39.2,
@@ -1519,11 +1519,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:34:19Z"
+      "collected_at": "2026-10-21T07:50:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:35:19Z",
+      "timestamp": "2026-10-21T07:51:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 44.2,
@@ -1532,11 +1532,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:35:19Z"
+      "collected_at": "2026-10-21T07:51:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:36:19Z",
+      "timestamp": "2026-10-21T07:52:12Z",
       "record_type": "metric",
       "invocations": 5,
       "avg_duration_ms": 43.4,
@@ -1545,11 +1545,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 0,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:36:19Z"
+      "collected_at": "2026-10-21T07:52:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:37:19Z",
+      "timestamp": "2026-10-21T07:53:12Z",
       "record_type": "metric",
       "invocations": 6,
       "avg_duration_ms": 43.3,
@@ -1558,11 +1558,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 1,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:37:19Z"
+      "collected_at": "2026-10-21T07:53:12Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:37:27Z",
+      "timestamp": "2026-10-21T07:53:20Z",
       "record_type": "metric",
       "invocations": 1,
       "avg_duration_ms": 268.0,
@@ -1571,11 +1571,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 1,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:37:27Z"
+      "collected_at": "2026-10-21T07:53:20Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:37:51Z",
+      "timestamp": "2026-10-21T07:53:44Z",
       "record_type": "metric",
       "invocations": 1,
       "avg_duration_ms": 200.46,
@@ -1584,11 +1584,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 1,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:37:51Z"
+      "collected_at": "2026-10-21T07:53:44Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:38:24Z",
+      "timestamp": "2026-10-21T07:54:17Z",
       "record_type": "metric",
       "invocations": 1,
       "avg_duration_ms": 208.01,
@@ -1597,11 +1597,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 1,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:38:24Z"
+      "collected_at": "2026-10-21T07:54:17Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:38:52Z",
+      "timestamp": "2026-10-21T07:54:45Z",
       "record_type": "metric",
       "invocations": 1,
       "avg_duration_ms": 200.0,
@@ -1610,11 +1610,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 1,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:38:52Z"
+      "collected_at": "2026-10-21T07:54:45Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:42:26Z",
+      "timestamp": "2026-10-21T07:58:19Z",
       "record_type": "metric",
       "invocations": 1,
       "avg_duration_ms": 2100.0,
@@ -1623,11 +1623,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 1,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:42:26Z"
+      "collected_at": "2026-10-21T07:58:19Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:42:37Z",
+      "timestamp": "2026-10-21T07:58:30Z",
       "record_type": "metric",
       "invocations": 2,
       "avg_duration_ms": 216.93,
@@ -1636,11 +1636,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 2,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:42:37Z"
+      "collected_at": "2026-10-21T07:58:30Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:43:43Z",
+      "timestamp": "2026-10-21T07:59:36Z",
       "record_type": "metric",
       "invocations": 2,
       "avg_duration_ms": 284.44,
@@ -1649,11 +1649,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 2,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:43:43Z"
+      "collected_at": "2026-10-21T07:59:36Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:45:12Z",
+      "timestamp": "2026-10-21T08:01:05Z",
       "record_type": "metric",
       "invocations": 2,
       "avg_duration_ms": 206.18,
@@ -1662,11 +1662,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 2,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:45:12Z"
+      "collected_at": "2026-10-21T08:01:05Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:47:43Z",
+      "timestamp": "2026-10-21T08:03:36Z",
       "record_type": "metric",
       "invocations": 1,
       "avg_duration_ms": 200.45,
@@ -1675,11 +1675,11 @@
       "concurrent_executions": 1,
       "cold_start_count": 1,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:47:43Z"
+      "collected_at": "2026-10-21T08:03:36Z"
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "2026-10-21T07:47:44Z",
+      "timestamp": "2026-10-21T08:03:37Z",
       "record_type": "metric",
       "invocations": 1,
       "avg_duration_ms": 2100.0,
@@ -1688,15 +1688,15 @@
       "concurrent_executions": 1,
       "cold_start_count": 1,
       "provisioned_concurrency": 1,
-      "collected_at": "2026-10-21T07:47:44Z"
+      "collected_at": "2026-10-21T08:03:37Z"
     }
   ],
   "decisions": [
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T05:38:19Z",
+      "timestamp": "decision#2026-10-21T05:54:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T05:38:19Z",
+      "decided_at": "2026-10-21T05:54:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -1713,9 +1713,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T05:43:19Z",
+      "timestamp": "decision#2026-10-21T05:59:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T05:43:19Z",
+      "decided_at": "2026-10-21T05:59:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -1732,9 +1732,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T05:48:19Z",
+      "timestamp": "decision#2026-10-21T06:04:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T05:48:19Z",
+      "decided_at": "2026-10-21T06:04:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -1751,9 +1751,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T05:53:19Z",
+      "timestamp": "decision#2026-10-21T06:09:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T05:53:19Z",
+      "decided_at": "2026-10-21T06:09:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -1770,9 +1770,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T05:58:19Z",
+      "timestamp": "decision#2026-10-21T06:14:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T05:58:19Z",
+      "decided_at": "2026-10-21T06:14:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -1789,9 +1789,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T06:03:19Z",
+      "timestamp": "decision#2026-10-21T06:19:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T06:03:19Z",
+      "decided_at": "2026-10-21T06:19:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -1808,9 +1808,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T06:08:19Z",
+      "timestamp": "decision#2026-10-21T06:24:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T06:08:19Z",
+      "decided_at": "2026-10-21T06:24:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -1827,9 +1827,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T06:13:19Z",
+      "timestamp": "decision#2026-10-21T06:29:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T06:13:19Z",
+      "decided_at": "2026-10-21T06:29:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -1846,9 +1846,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T06:18:19Z",
+      "timestamp": "decision#2026-10-21T06:34:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T06:18:19Z",
+      "decided_at": "2026-10-21T06:34:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -1865,9 +1865,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T06:23:19Z",
+      "timestamp": "decision#2026-10-21T06:39:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T06:23:19Z",
+      "decided_at": "2026-10-21T06:39:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -1884,9 +1884,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T06:28:19Z",
+      "timestamp": "decision#2026-10-21T06:44:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T06:28:19Z",
+      "decided_at": "2026-10-21T06:44:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -1903,9 +1903,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T06:33:19Z",
+      "timestamp": "decision#2026-10-21T06:49:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T06:33:19Z",
+      "decided_at": "2026-10-21T06:49:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -1922,9 +1922,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T06:38:19Z",
+      "timestamp": "decision#2026-10-21T06:54:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T06:38:19Z",
+      "decided_at": "2026-10-21T06:54:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -1941,9 +1941,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T06:43:19Z",
+      "timestamp": "decision#2026-10-21T06:59:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T06:43:19Z",
+      "decided_at": "2026-10-21T06:59:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -1960,9 +1960,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T06:48:19Z",
+      "timestamp": "decision#2026-10-21T07:04:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T06:48:19Z",
+      "decided_at": "2026-10-21T07:04:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -1979,9 +1979,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T06:53:19Z",
+      "timestamp": "decision#2026-10-21T07:09:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T06:53:19Z",
+      "decided_at": "2026-10-21T07:09:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -1998,9 +1998,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T06:58:19Z",
+      "timestamp": "decision#2026-10-21T07:14:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T06:58:19Z",
+      "decided_at": "2026-10-21T07:14:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -2017,9 +2017,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T07:03:19Z",
+      "timestamp": "decision#2026-10-21T07:19:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T07:03:19Z",
+      "decided_at": "2026-10-21T07:19:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -2036,9 +2036,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T07:08:19Z",
+      "timestamp": "decision#2026-10-21T07:24:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T07:08:19Z",
+      "decided_at": "2026-10-21T07:24:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -2055,9 +2055,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T07:13:19Z",
+      "timestamp": "decision#2026-10-21T07:29:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T07:13:19Z",
+      "decided_at": "2026-10-21T07:29:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -2074,9 +2074,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T07:18:19Z",
+      "timestamp": "decision#2026-10-21T07:34:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T07:18:19Z",
+      "decided_at": "2026-10-21T07:34:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -2093,9 +2093,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T07:23:19Z",
+      "timestamp": "decision#2026-10-21T07:39:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T07:23:19Z",
+      "decided_at": "2026-10-21T07:39:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -2112,9 +2112,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T07:28:19Z",
+      "timestamp": "decision#2026-10-21T07:44:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T07:28:19Z",
+      "decided_at": "2026-10-21T07:44:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -2131,9 +2131,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T07:33:19Z",
+      "timestamp": "decision#2026-10-21T07:49:12Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T07:33:19Z",
+      "decided_at": "2026-10-21T07:49:12Z",
       "quantile_used": "q90",
       "predicted_rps": "0.098",
       "raw_copies": 1,
@@ -2150,9 +2150,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T07:39:22Z",
+      "timestamp": "decision#2026-10-21T07:55:15Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T07:39:22Z",
+      "decided_at": "2026-10-21T07:55:15Z",
       "quantile_used": "q90",
       "predicted_rps": "0.09",
       "raw_copies": 1,
@@ -2169,9 +2169,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T07:39:30Z",
+      "timestamp": "decision#2026-10-21T07:55:23Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T07:39:30Z",
+      "decided_at": "2026-10-21T07:55:23Z",
       "quantile_used": "q90",
       "predicted_rps": "0.09",
       "raw_copies": 1,
@@ -2188,9 +2188,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T07:40:45Z",
+      "timestamp": "decision#2026-10-21T07:56:38Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T07:40:45Z",
+      "decided_at": "2026-10-21T07:56:38Z",
       "quantile_used": "guardrail_override",
       "predicted_rps": "0.0",
       "raw_copies": 1,
@@ -2207,9 +2207,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T07:40:45Z",
+      "timestamp": "decision#2026-10-21T07:56:38Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T07:40:45Z",
+      "decided_at": "2026-10-21T07:56:38Z",
       "quantile_used": "q90",
       "predicted_rps": "0.09",
       "raw_copies": 1,
@@ -2226,9 +2226,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T07:42:26Z",
+      "timestamp": "decision#2026-10-21T07:58:19Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T07:42:26Z",
+      "decided_at": "2026-10-21T07:58:19Z",
       "quantile_used": "guardrail_override",
       "predicted_rps": "0.0",
       "raw_copies": 1,
@@ -2245,9 +2245,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T07:42:26Z",
+      "timestamp": "decision#2026-10-21T07:58:19Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T07:42:26Z",
+      "decided_at": "2026-10-21T07:58:19Z",
       "quantile_used": "q90",
       "predicted_rps": "0.083",
       "raw_copies": 1,
@@ -2264,9 +2264,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T07:42:37Z",
+      "timestamp": "decision#2026-10-21T07:58:30Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T07:42:37Z",
+      "decided_at": "2026-10-21T07:58:30Z",
       "quantile_used": "guardrail_override",
       "predicted_rps": "0.0",
       "raw_copies": 1,
@@ -2283,9 +2283,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T07:42:37Z",
+      "timestamp": "decision#2026-10-21T07:58:30Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T07:42:37Z",
+      "decided_at": "2026-10-21T07:58:30Z",
       "quantile_used": "q90",
       "predicted_rps": "0.08",
       "raw_copies": 1,
@@ -2302,9 +2302,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T07:43:43Z",
+      "timestamp": "decision#2026-10-21T07:59:36Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T07:43:43Z",
+      "decided_at": "2026-10-21T07:59:36Z",
       "quantile_used": "guardrail_override",
       "predicted_rps": "0.0",
       "raw_copies": 1,
@@ -2321,9 +2321,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T07:43:43Z",
+      "timestamp": "decision#2026-10-21T07:59:36Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T07:43:43Z",
+      "decided_at": "2026-10-21T07:59:36Z",
       "quantile_used": "q90",
       "predicted_rps": "0.075",
       "raw_copies": 1,
@@ -2340,9 +2340,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T07:45:12Z",
+      "timestamp": "decision#2026-10-21T08:01:05Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T07:45:12Z",
+      "decided_at": "2026-10-21T08:01:05Z",
       "quantile_used": "guardrail_override",
       "predicted_rps": "0.0",
       "raw_copies": 1,
@@ -2359,9 +2359,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T07:45:12Z",
+      "timestamp": "decision#2026-10-21T08:01:05Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T07:45:12Z",
+      "decided_at": "2026-10-21T08:01:05Z",
       "quantile_used": "q90",
       "predicted_rps": "0.07",
       "raw_copies": 1,
@@ -2378,9 +2378,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T07:47:44Z",
+      "timestamp": "decision#2026-10-21T08:03:37Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T07:47:44Z",
+      "decided_at": "2026-10-21T08:03:37Z",
       "quantile_used": "guardrail_override",
       "predicted_rps": "0.0",
       "raw_copies": 1,
@@ -2397,9 +2397,9 @@
     },
     {
       "function_name": "warmify-demo",
-      "timestamp": "decision#2026-10-21T07:47:44Z",
+      "timestamp": "decision#2026-10-21T08:03:37Z",
       "record_type": "scaling_decision",
-      "decided_at": "2026-10-21T07:47:44Z",
+      "decided_at": "2026-10-21T08:03:37Z",
       "quantile_used": "q90",
       "predicted_rps": "0.058",
       "raw_copies": 1,
