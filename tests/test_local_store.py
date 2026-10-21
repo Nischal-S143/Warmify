@@ -56,6 +56,50 @@ class TestWarmifyLocalStore(unittest.TestCase):
         self.assertIn("guardrail_reasons", res)
         self.assertIn("predictions", res)
 
+    def test_fleet_manager(self):
+        fleet = local_store.get_fleet_functions()
+        self.assertIsInstance(fleet, list)
+        self.assertGreaterEqual(len(fleet), 1)
+
+        new_fn = {
+            "function_name": "notification-worker",
+            "memory_mb": 128,
+            "runtime": "python3.11",
+            "current_pc": 3,
+            "min_floor": 1,
+            "max_cap": 15,
+            "status": "MANAGED_ACTIVE"
+        }
+        updated = local_store.register_fleet_function(new_fn)
+        names = [f["function_name"] for f in updated]
+        self.assertIn("notification-worker", names)
+
+    def test_alerts_subsystem(self):
+        alerts = local_store.get_alerts()
+        self.assertIsInstance(alerts, list)
+
+        # Test adding alert
+        new_alt = local_store.add_alert(
+            severity="WARNING",
+            alert_type="BUDGET_CAP_APPROACH",
+            function_name="warmify-demo",
+            message="Provisioned concurrency at 90% of budget cap"
+        )
+        self.assertEqual(new_alt["severity"], "WARNING")
+        self.assertIn("id", new_alt)
+
+        # Test webhook config
+        wh = local_store.configure_webhook("https://hooks.slack.com/services/abc/xyz")
+        self.assertEqual(wh.get("status"), "configured")
+        cfg = local_store.get_webhook_config()
+        self.assertEqual(cfg.get("webhook_url"), "https://hooks.slack.com/services/abc/xyz")
+
+    def test_model_status_helper(self):
+        status = local_store.get_model_status()
+        self.assertIn("models", status)
+        self.assertIn("target_quantiles", status)
+        self.assertIn("features", status)
+
 
 if __name__ == "__main__":
     unittest.main()

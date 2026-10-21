@@ -83,6 +83,63 @@ class TestWarmifyApiEndpoints(unittest.TestCase):
         self.assertIn("experiment_arms", data)
         self.assertEqual(len(data["experiment_arms"]), 6)
 
+    def test_fleet_endpoints(self):
+        resp = self.client.get("/api/fleet")
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertEqual(data.get("status"), "active")
+        self.assertIn("fleet_size", data)
+        self.assertIn("functions", data)
+        self.assertGreaterEqual(data["fleet_size"], 1)
+
+        # Test fleet register
+        reg_resp = self.client.post("/api/fleet/register", json={
+            "function_name": "test-microservice",
+            "memory_mb": 256,
+            "runtime": "python3.11",
+            "current_pc": 2,
+            "min_floor": 1,
+            "max_cap": 20,
+            "target_quantile": "q90",
+            "status": "MANAGED_ACTIVE"
+        })
+        self.assertEqual(reg_resp.status_code, 200)
+        self.assertEqual(reg_resp.json().get("status"), "registered")
+
+        # Test fleet scale
+        scale_resp = self.client.post("/api/fleet/test-microservice/scale?target_pc=5")
+        self.assertEqual(scale_resp.status_code, 200)
+        self.assertEqual(scale_resp.json().get("status"), "scaled")
+
+    def test_alerts_endpoints(self):
+        resp = self.client.get("/api/alerts")
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertEqual(data.get("status"), "ok")
+        self.assertIn("alerts", data)
+
+        # Test webhook configuration
+        wh_resp = self.client.post("/api/alerts/webhook", json={"webhook_url": "https://hooks.slack.com/services/test/123"})
+        self.assertEqual(wh_resp.status_code, 200)
+
+        # Test alert test dispatch
+        test_alert_resp = self.client.post("/api/alerts/test", json={"message": "Test ping alert"})
+        self.assertEqual(test_alert_resp.status_code, 200)
+        self.assertEqual(test_alert_resp.json().get("status"), "dispatched")
+
+    def test_model_retrain_and_status(self):
+        resp = self.client.get("/api/model/status")
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertIn("models", data)
+        self.assertIn("features", data)
+
+        # Trigger model retraining
+        retrain_resp = self.client.post("/api/model/retrain")
+        self.assertEqual(retrain_resp.status_code, 200)
+        retrain_data = retrain_resp.json()
+        self.assertIn("status", retrain_data)
+
 
 if __name__ == "__main__":
     unittest.main()

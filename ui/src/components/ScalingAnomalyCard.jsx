@@ -100,6 +100,52 @@ export default function ScalingAnomalyCard({ onActionExecuted, scalingState }) {
     }
   };
 
+  // Trigger MLOps Retrain
+  const handleRetrainModel = async () => {
+    setLoadingAction('retrain');
+    addLog('[MLOPS] Initiating automated online retraining on historical telemetry...', 'cyan');
+    try {
+      const res = await fetch('/api/model/retrain', { method: 'POST' });
+      const data = await res.json();
+      if (data.status === 'retrained_successfully') {
+        addLog(
+          `[RETRAIN SUCCESS] Q50/Q90/Q95 retrained on ${data.samples} samples | Drift: ${data.data_drift} | 0 Downtime Deployment`,
+          'mint'
+        );
+      } else {
+        addLog(`[RETRAIN NOTICE] ${data.status}`, 'cyan');
+      }
+      if (onActionExecuted) onActionExecuted();
+    } catch (e) {
+      addLog(`[RETRAIN ERROR] ${e.message}`, 'red');
+    } finally {
+      setLoadingAction('');
+    }
+  };
+
+  // Dispatch Webhook Alert
+  const handleSendTestAlert = async () => {
+    setLoadingAction('alert');
+    addLog('[ALERT] Dispatching incident notification to configured Webhook...', 'amber');
+    try {
+      const res = await fetch('/api/alerts/test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'Proactive Alert: Cold-start surge override triggered.' }),
+      });
+      const data = await res.json();
+      addLog(
+        `[ALERT DISPATCHED] ID: ${data.alert?.id} | Severity: ${data.alert?.severity} | Type: ${data.alert?.type}`,
+        'mint'
+      );
+      if (onActionExecuted) onActionExecuted();
+    } catch (e) {
+      addLog(`[ALERT ERROR] ${e.message}`, 'red');
+    } finally {
+      setLoadingAction('');
+    }
+  };
+
   return (
     <div className="hud-glass-card interactive-control-card">
       <div className="control-title-bar">
@@ -134,13 +180,32 @@ export default function ScalingAnomalyCard({ onActionExecuted, scalingState }) {
           </button>
         </div>
 
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+          <button
+            className="action-trigger-btn btn-ghost-dismiss"
+            onClick={handleRunCycle}
+            disabled={!!loadingAction}
+            style={{ fontSize: '0.68rem', padding: '5px 8px' }}
+          >
+            {loadingAction === 'cycle' ? 'CALCULATING...' : "Run Little's Law Cycle"}
+          </button>
+          <button
+            className="action-trigger-btn btn-ghost-dismiss"
+            onClick={handleRetrainModel}
+            disabled={!!loadingAction}
+            style={{ fontSize: '0.68rem', padding: '5px 8px', borderColor: 'var(--c-mint)', color: 'var(--c-mint)' }}
+          >
+            {loadingAction === 'retrain' ? 'RETRAINING...' : 'Retrain ML Models'}
+          </button>
+        </div>
+
         <button
           className="action-trigger-btn btn-ghost-dismiss"
-          onClick={handleRunCycle}
+          onClick={handleSendTestAlert}
           disabled={!!loadingAction}
-          style={{ fontSize: '0.68rem', padding: '5px 8px' }}
+          style={{ fontSize: '0.68rem', padding: '5px 8px', borderColor: 'var(--c-amber)', color: 'var(--c-amber)' }}
         >
-          {loadingAction === 'cycle' ? 'CALCULATING...' : 'Run Little\'s Law Cycle'}
+          {loadingAction === 'alert' ? 'DISPATCHING...' : 'Dispatch Alert Notification'}
         </button>
       </div>
 
