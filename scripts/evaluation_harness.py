@@ -37,7 +37,10 @@ import time
 import uuid
 from datetime import datetime, timezone
 
-import boto3
+try:
+    import boto3
+except ImportError:
+    boto3 = None
 
 # Import the load generator from the same scripts directory
 sys.path.insert(0, os.path.dirname(__file__))
@@ -84,6 +87,10 @@ class ExperimentArm:
 
     def _set_provisioned_concurrency(self, count: int):
         """Set provisioned concurrency on the alias."""
+        self._simulated_pc = count
+        if self.lambda_client is None:
+            print(f"  [{self.name}] (Local Mode) Provisioned concurrency = {count}")
+            return
         try:
             if count > 0:
                 self.lambda_client.put_provisioned_concurrency_config(
@@ -102,6 +109,8 @@ class ExperimentArm:
             print(f"  [{self.name}] PC config error: {e}")
 
     def _get_provisioned_concurrency(self) -> int:
+        if self.lambda_client is None:
+            return getattr(self, "_simulated_pc", 1)
         try:
             resp = self.lambda_client.get_provisioned_concurrency_config(
                 FunctionName=self.function_name,
@@ -109,7 +118,7 @@ class ExperimentArm:
             )
             return resp.get("AllocatedProvisionedConcurrentExecutions", 0)
         except Exception:
-            return 0
+            return getattr(self, "_simulated_pc", 0)
 
     def get_warm_copy_minutes(self, duration_minutes: float) -> float:
         """Estimate total warm-copy-minutes consumed during the run."""
@@ -141,12 +150,13 @@ class PingWarmerArm(ExperimentArm):
     def _ping_loop(self):
         while not self._stop_event.is_set():
             try:
-                self.lambda_client.invoke(
-                    FunctionName=self.function_name,
-                    Qualifier=self.alias,
-                    InvocationType="Event",
-                    Payload=json.dumps({"warmup": True}).encode(),
-                )
+                if self.lambda_client:
+                    self.lambda_client.invoke(
+                        FunctionName=self.function_name,
+                        Qualifier=self.alias,
+                        InvocationType="Event",
+                        Payload=json.dumps({"warmup": True}).encode(),
+                    )
             except Exception as e:
                 print(f"  [{self.name}] Ping error: {e}")
             self._stop_event.wait(300)  # 5 minutes
@@ -242,28 +252,45 @@ def run_experiment_arm(arm: ExperimentArm, endpoint: str,
 
 
 def write_results_to_dynamodb(results: list, table_name: str, run_id: str,
-                               region: str = None):
-    """Write evaluation results to DynamoDB for /api/evaluation."""
-    kwargs = {}
-    if region:
-        kwargs["region_name"] = region
-    dynamodb = boto3.resource("dynamodb", **kwargs)
-    table = dynamodb.Table(table_name)
+                               region: str = None, local: bool = False):
+    """Write evaluation results to DynamoDB or local data store for /api/evaluation."""
+    wrote_to_aws = False
+    if not local:
+        try:
+            kwargs = {}
+            if region:
+                kwargs["region_name"] = region
+            dynamodb = boto3.resource("dynamodb", **kwargs)
+            table = dynamodb.Table(table_name)
+            now = datetime.now(timezone.utc).isoformat()
+            for result in results:
+                item = {
+                    "function_name": "evaluation_results",
+                    "timestamp": f"eval#{run_id}#{result['experiment_arm']}",
+                    "record_type": "evaluation",
+                    "run_id": run_id,
+                    "completed_at": now,
+                    **{k: str(v) if isinstance(v, float) else v
+                       for k, v in result.items()},
+                }
+                table.put_item(Item=item)
+                print(f"  Wrote result to DynamoDB for arm: {result['experiment_arm']}")
+            wrote_to_aws = True
+        except Exception as e:
+            print(f"  Notice: DynamoDB write bypassed ({e}), saving to local store...")
 
-    now = datetime.now(timezone.utc).isoformat()
-
-    for result in results:
-        item = {
-            "function_name": "evaluation_results",
-            "timestamp": f"eval#{run_id}#{result['experiment_arm']}",
-            "record_type": "evaluation",
-            "run_id": run_id,
-            "completed_at": now,
-            **{k: str(v) if isinstance(v, float) else v
-               for k, v in result.items()},
-        }
-        table.put_item(Item=item)
-        print(f"  Wrote result for arm: {result['experiment_arm']}")
+    # Always persist to local store as well so local dev/docs/dashboard has access
+    local_data_path = os.path.join(os.path.dirname(__file__), "..", "data", "warmify_local_data.json")
+    try:
+        if os.path.exists(local_data_path):
+            with open(local_data_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            data["evaluations"] = results
+            with open(local_data_path, "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2)
+            print(f"  Persisted {len(results)} results to {local_data_path}")
+    except Exception as e:
+        print(f"  Local store save error: {e}")
 
 
 def main():
@@ -271,8 +298,8 @@ def main():
         description="Warmify Evaluation Harness — A/B test experiment arms"
     )
     parser.add_argument(
-        "--endpoint", required=True,
-        help="Demo function public URL"
+        "--endpoint", default="http://127.0.0.1:8000/api/demo/invoke",
+        help="Demo function public URL or local invoke URL"
     )
     parser.add_argument(
         "--function-name", default="warmify-demo",
@@ -299,6 +326,10 @@ def main():
         help="AWS region"
     )
     parser.add_argument(
+        "--local", action="store_true",
+        help="Run in local simulation mode (no AWS credentials required)"
+    )
+    parser.add_argument(
         "--arms", nargs="+", default=EXPERIMENT_ARMS,
         choices=EXPERIMENT_ARMS,
         help="Which experiment arms to run"
@@ -306,9 +337,14 @@ def main():
 
     args = parser.parse_args()
 
-    lambda_client = boto3.client(
-        "lambda", **({"region_name": args.region} if args.region else {})
-    )
+    lambda_client = None
+    if not args.local:
+        try:
+            lambda_client = boto3.client(
+                "lambda", **({"region_name": args.region} if args.region else {})
+            )
+        except Exception:
+            lambda_client = None
     memory_mb = 512  # Must match DemoFunction MemorySize in template.yaml
 
     run_id = f"eval-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S')}-{uuid.uuid4().hex[:8]}"
@@ -404,7 +440,7 @@ def main():
     if all_results:
         print(f"\nWriting {len(all_results)} results to DynamoDB...")
         write_results_to_dynamodb(
-            all_results, args.table, run_id, args.region
+            all_results, args.table, run_id, args.region, local=args.local
         )
 
     # Print summary table

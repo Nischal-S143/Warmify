@@ -28,8 +28,12 @@ import pickle
 import sys
 from datetime import datetime, timezone
 
-import boto3
-from boto3.dynamodb.conditions import Key, Attr
+try:
+    import boto3
+    from boto3.dynamodb.conditions import Key, Attr
+except ImportError:
+    boto3 = None
+    Key, Attr = None, None
 
 try:
     import numpy as np
