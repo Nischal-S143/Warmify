@@ -1,13 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
 
 export default function ServerlessTopology({
-  selectedFunction,
   controllerMode,
   viewMode,
   scalingState,
   latestMetric,
   onOpenBenchmarks,
-  onSelectFunction,
 }) {
   const canvasRef = useRef(null);
   const [selectedStage, setSelectedStage] = useState('pipeline-stage-2');
@@ -36,7 +34,11 @@ export default function ServerlessTopology({
       const dpr = window.devicePixelRatio || 1;
       canvas.width = width * dpr;
       canvas.height = height * dpr;
-      ctx.resetTransform ? ctx.resetTransform() : ctx.setTransform(1, 0, 0, 1, 0, 0);
+      if (ctx.resetTransform) {
+        ctx.resetTransform();
+      } else {
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+      }
       ctx.scale(dpr, dpr);
     };
 

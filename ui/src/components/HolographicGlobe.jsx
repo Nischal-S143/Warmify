@@ -25,8 +25,11 @@ export default function HolographicGlobe({
       height = rect.height;
       const dpr = window.devicePixelRatio || 1;
       canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      ctx.resetTransform ? ctx.resetTransform() : ctx.setTransform(1, 0, 0, 1, 0, 0);
+      if (ctx.resetTransform) {
+        ctx.resetTransform();
+      } else {
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+      }
       ctx.scale(dpr, dpr);
       cx = width / 2;
       cy = height / 2;

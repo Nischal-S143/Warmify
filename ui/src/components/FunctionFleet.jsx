@@ -94,7 +94,6 @@ export default function FunctionFleet({
       <div className="fleet-units-scroll">
         {functions.map((fn) => {
           const isSelected = fn.id === selectedFuncId;
-          const isReady = fn.status === 'READY' || fn.status === 'Ready' || fn.status === 'Nominal';
 
           return (
             <div
