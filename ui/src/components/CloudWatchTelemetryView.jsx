@@ -1,5 +1,4 @@
 import React from 'react';
-import { Activity, Database, Server, Clock, ShieldCheck, Zap } from 'lucide-react';
 
 export default function CloudWatchTelemetryView({
   timelineData,

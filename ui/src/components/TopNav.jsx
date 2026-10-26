@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity, Settings, ShieldCheck, BarChart3, Layers, Radio } from 'lucide-react';
+import { Activity, Settings, ShieldCheck, BarChart3 } from 'lucide-react';
 
 export default function TopNav({
   activeTab,
