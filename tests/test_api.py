@@ -40,6 +40,16 @@ class TestWarmifyApiEndpoints(unittest.TestCase):
         self.assertIn("components", data)
         self.assertEqual(data["mode"], "local_simulation")
 
+    def test_root_and_dashboard_endpoints(self):
+        resp_get = self.client.get("/")
+        self.assertEqual(resp_get.status_code, 200)
+        resp_head = self.client.head("/")
+        self.assertEqual(resp_head.status_code, 200)
+        resp_dash = self.client.get("/dashboard")
+        self.assertEqual(resp_dash.status_code, 200)
+        resp_api = self.client.get("/api")
+        self.assertEqual(resp_api.status_code, 200)
+
     def test_timeline_endpoint(self):
         resp = self.client.get("/api/timeline?minutes=60")
         self.assertEqual(resp.status_code, 200)
