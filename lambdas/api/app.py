@@ -836,8 +836,8 @@ if FRONTEND_DIR.exists():
         app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="assets")
 
 
-@app.get("/", response_class=HTMLResponse)
-@app.get("/dashboard", response_class=HTMLResponse)
+@app.api_route("/", methods=["GET", "HEAD"], response_class=HTMLResponse)
+@app.api_route("/dashboard", methods=["GET", "HEAD"], response_class=HTMLResponse)
 def serve_dashboard():
     """Serves the aerospace mission control Warmify console."""
     index_file = FRONTEND_DIR / "index.html"
