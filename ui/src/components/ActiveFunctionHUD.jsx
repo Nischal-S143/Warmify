@@ -4,7 +4,6 @@ export default function ActiveFunctionHUD({
   selectedFunction,
   scalingState,
   timelineData,
-  healthData
 }) {
   const functionName = selectedFunction?.name || 'warmify-demo:prod';
   const memory = selectedFunction?.memory || '512 MB';
@@ -29,8 +28,6 @@ export default function ActiveFunctionHUD({
     const maxVal = Math.max(15, ...recent.map((r) => r.invocations || 0));
     return recent.map((r) => Math.max(8, Math.round(((r.invocations || 1) / maxVal) * 100)));
   }, [timelineData]);
-
-  const loadVal = selectedFunction?.loadPct || 86;
 
   return (
     <div className="hud-glass-card active-asset-box">

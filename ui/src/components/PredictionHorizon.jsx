@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function PredictionHorizon({ timelineData, scalingState }) {
+export default function PredictionHorizon({ timelineData }) {
   const traffic = timelineData?.traffic_history || [];
   const forecasts = timelineData?.forecasts || [];
   const warmCopies = timelineData?.warm_copy_history || [];
