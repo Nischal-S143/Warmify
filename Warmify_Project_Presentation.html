@@ -1,0 +1,2163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warmify — Autonomous Predictive Serverless Concurrency</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ═══════════════════════════════════════════════════════════
+           PRINT & PDF LAYOUT RULES
+           ═══════════════════════════════════════════════════════════ */
+        @page {
+            size: A4 portrait;
+            margin: 8mm 10mm;
+        }
+
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+            body {
+                background: #ffffff !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .container {
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .page {
+                box-shadow: none !important;
+                margin-bottom: 0 !important;
+                border: 1px solid var(--gray-200) !important;
+                page-break-after: always !important;
+                break-after: page !important;
+            }
+            .page:last-child {
+                page-break-after: auto !important;
+                break-after: auto !important;
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           COLOR SYSTEM & DESIGN TOKENS
+           ═══════════════════════════════════════════════════════════ */
+        :root {
+            --blue: #2563eb;
+            --blue-dark: #1d4ed8;
+            --blue-light: #3b82f6;
+            --blue-bg: #eff6ff;
+            --blue-border: #bfdbfe;
+
+            --indigo: #4f46e5;
+            --indigo-bg: #eef2ff;
+            --indigo-border: #c7d2fe;
+
+            --purple: #7c3aed;
+            --purple-bg: #f5f3ff;
+            --purple-border: #ddd6fe;
+
+            --green: #059669;
+            --green-dark: #047857;
+            --green-bg: #ecfdf5;
+            --green-border: #a7f3d0;
+
+            --red: #dc2626;
+            --red-bg: #fef2f2;
+            --red-border: #fecaca;
+
+            --amber: #d97706;
+            --amber-bg: #fffbeb;
+            --amber-border: #fde68a;
+
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #e2e8f0;
+            color: var(--gray-800);
+            line-height: 1.45;
+            font-size: 11.5px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           SLIDE / PAGE SHELL (Strict 1040px height for exact A4 fit)
+           ═══════════════════════════════════════════════════════════ */
+        .page {
+            width: 100%;
+            height: 1040px;
+            background: #ffffff;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            overflow: hidden;
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            page-break-after: always;
+            break-after: page;
+        }
+
+        .page-header {
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border-bottom: 1px solid var(--gray-200);
+            flex-shrink: 0;
+        }
+
+        .page-header.blue { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+        .page-header.indigo { background: linear-gradient(135deg, #3730a3, #6366f1); }
+        .page-header.purple { background: linear-gradient(135deg, #6b21a8, #9333ea); }
+        .page-header.green { background: linear-gradient(135deg, #065f46, #10b981); }
+        .page-header.amber { background: linear-gradient(135deg, #92400e, #f59e0b); }
+        .page-header.red { background: linear-gradient(135deg, #991b1b, #ef4444); }
+        .page-header.dark { background: linear-gradient(135deg, #0f172a, #334155); }
+
+        .page-header .num {
+            background: rgba(255, 255, 255, 0.22);
+            color: #ffffff;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 13px;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .page-header h2 {
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+        }
+
+        .page-header .category {
+            margin-left: auto;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: rgba(255, 255, 255, 0.85);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        .page-body {
+            padding: 16px 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        .page-footer {
+            margin-top: auto;
+            padding-top: 8px;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
+            color: var(--gray-400);
+            flex-shrink: 0;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           TYPOGRAPHY & ACCENTS
+           ═══════════════════════════════════════════════════════════ */
+        h3 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin: 8px 0 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        h4 {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin-bottom: 3px;
+        }
+
+        p {
+            margin-bottom: 6px;
+            color: var(--gray-600);
+            font-size: 11.5px;
+            line-height: 1.45;
+        }
+
+        strong {
+            color: var(--gray-900);
+            font-weight: 600;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--gray-100);
+            border: 1px solid var(--gray-200);
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 10.5px;
+            color: var(--indigo);
+            font-weight: 500;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           GRIDS & CARDS
+           ═══════════════════════════════════════════════════════════ */
+        .grid {
+            display: grid;
+            gap: 10px;
+            margin: 6px 0;
+        }
+        .grid-2 { grid-template-columns: 1fr 1fr; }
+        .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+        .grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+        .card {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 6px;
+            padding: 10px 12px;
+        }
+        .card-blue { border-left: 3.5px solid var(--blue); }
+        .card-green { border-left: 3.5px solid var(--green); }
+        .card-purple { border-left: 3.5px solid var(--purple); }
+        .card-amber { border-left: 3.5px solid var(--amber); }
+        .card-red { border-left: 3.5px solid var(--red); }
+        .card-indigo { border-left: 3.5px solid var(--indigo); }
+
+        .card p {
+            font-size: 11px;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+        .card ul {
+            padding-left: 14px;
+            margin-top: 3px;
+        }
+        .card ul li {
+            font-size: 10.5px;
+            color: var(--gray-600);
+            margin-bottom: 2px;
+            line-height: 1.35;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           CALLOUT BOXES
+           ═══════════════════════════════════════════════════════════ */
+        .callout {
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin: 6px 0;
+            font-size: 11px;
+            line-height: 1.45;
+        }
+        .callout-blue { background: var(--blue-bg); border-left: 3.5px solid var(--blue); }
+        .callout-green { background: var(--green-bg); border-left: 3.5px solid var(--green); }
+        .callout-amber { background: var(--amber-bg); border-left: 3.5px solid var(--amber); }
+        .callout-red { background: var(--red-bg); border-left: 3.5px solid var(--red); }
+
+        .callout-title {
+            font-weight: 700;
+            font-size: 11.5px;
+            color: var(--gray-900);
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           TABLES
+           ═══════════════════════════════════════════════════════════ */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 6px 0;
+            font-size: 11px;
+        }
+        th {
+            background: var(--gray-100);
+            font-weight: 700;
+            text-align: left;
+            padding: 6px 9px;
+            border: 1px solid var(--gray-200);
+            color: var(--gray-700);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        td {
+            padding: 5px 9px;
+            border: 1px solid var(--gray-200);
+            color: var(--gray-600);
+            vertical-align: middle;
+            font-size: 10.5px;
+            line-height: 1.35;
+        }
+        tr:nth-child(even) td { background: var(--gray-50); }
+        .row-highlight td { background: #ecfdf5 !important; font-weight: 600; color: var(--green-dark); }
+        .row-bad td { background: #fef2f2 !important; color: var(--red); }
+
+        /* ═══════════════════════════════════════════════════════════
+           STAT BOXES
+           ═══════════════════════════════════════════════════════════ */
+        .stat-box {
+            text-align: center;
+            padding: 10px 8px;
+            border-radius: 6px;
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+        }
+        .stat-box .value {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--blue);
+            line-height: 1.1;
+        }
+        .stat-box .value.green { color: var(--green); }
+        .stat-box .value.red { color: var(--red); }
+        .stat-box .value.amber { color: var(--amber); }
+        .stat-box .value.purple { color: var(--purple); }
+        .stat-box .label {
+            font-size: 9.5px;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-top: 3px;
+            font-weight: 600;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           CODE & DIAGRAMS
+           ═══════════════════════════════════════════════════════════ */
+        .code {
+            background: #0f172a;
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            line-height: 1.4;
+            color: #e2e8f0;
+            overflow-x: auto;
+            margin: 6px 0;
+            border: 1px solid #1e293b;
+        }
+        .code .cm { color: #64748b; font-style: italic; }
+        .code .kw { color: #f472b6; font-weight: 600; }
+        .code .fn { color: #a78bfa; font-weight: 600; }
+        .code .str { color: #67e8f9; }
+        .code .num { color: #fbbf24; }
+
+        .diagram {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 10px 14px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9.5px;
+            line-height: 1.25;
+            white-space: pre;
+            overflow-x: auto;
+            color: #38bdf8;
+            margin: 6px 0;
+        }
+
+        .formula-box {
+            background: #eff6ff;
+            border: 1.5px solid #bfdbfe;
+            border-radius: 6px;
+            padding: 10px 14px;
+            margin: 6px 0;
+            text-align: center;
+        }
+        .formula-box .label {
+            font-size: 9.5px;
+            color: var(--gray-500);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .formula-box .formula {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14.5px;
+            font-weight: 700;
+            color: var(--blue-dark);
+            margin: 3px 0;
+        }
+        .formula-box .desc {
+            font-size: 10.5px;
+            color: var(--gray-600);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           TABLE OF CONTENTS
+           ═══════════════════════════════════════════════════════════ */
+        .toc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px 16px;
+            margin: 8px 0;
+        }
+        .toc-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 8px;
+            border-radius: 4px;
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            font-size: 10.5px;
+        }
+        .toc-num {
+            background: var(--blue);
+            color: #ffffff;
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 10px;
+            flex-shrink: 0;
+        }
+        .toc-item:nth-child(even) .toc-num { background: var(--indigo); }
+        .toc-title { font-weight: 600; color: var(--gray-800); }
+        .toc-sub { font-size: 9.5px; color: var(--gray-500); margin-left: auto; }
+
+        /* ═══════════════════════════════════════════════════════════
+           COVER & BACK COVER
+           ═══════════════════════════════════════════════════════════ */
+        .cover {
+            background: linear-gradient(135deg, #0f172a, #1e3a8a, #312e81);
+            color: #ffffff;
+            padding: 40px 36px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: none;
+        }
+        .cover .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #38bdf8;
+            width: fit-content;
+        }
+        .cover h1 {
+            font-size: 40px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            margin: 16px 0 10px;
+            background: linear-gradient(to right, #ffffff, #93c5fd, #c4b5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .cover .subtitle {
+            font-size: 15px;
+            color: #cbd5e1;
+            max-width: 680px;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+        .cover .badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        .cover .badge {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+        .cover-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .cover-stat {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            padding: 14px 10px;
+            text-align: center;
+        }
+        .cover-stat .num {
+            font-size: 26px;
+            font-weight: 900;
+            color: #38bdf8;
+        }
+        .cover-stat .lbl {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+        .cover-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 11px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 1 — EXECUTIVE COVER
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page cover">
+    <div>
+        <div class="header-badge">⚡ PREDICTIVE SERVERLESS ARCHITECTURE</div>
+        <h1>Warmify</h1>
+        <p class="subtitle">
+            Autonomous predictive auto-scaling for AWS Lambda. Eliminating cold starts before they happen using Quantile Regression (Q90), Little's Queuing Law, and 4-layer Safety Guardrails.
+        </p>
+
+        <div class="badges">
+            <span class="badge">🐍 Python 3.12</span>
+            <span class="badge">🚀 FastAPI + Mangum</span>
+            <span class="badge">☁️ AWS Lambda + SAM</span>
+            <span class="badge">⚛️ React 19 + Vite 8</span>
+            <span class="badge">📊 scikit-learn (Pinball Loss)</span>
+            <span class="badge">⚡ Amazon DynamoDB</span>
+        </div>
+    </div>
+
+    <div class="cover-stats">
+        <div class="cover-stat">
+            <div class="num" style="color:#4ade80;">96%</div>
+            <div class="lbl">Cold Starts Cut</div>
+        </div>
+        <div class="cover-stat">
+            <div class="num" style="color:#60a5fa;">45 ms</div>
+            <div class="lbl">P95 Latency</div>
+        </div>
+        <div class="cover-stat">
+            <div class="num" style="color:#facc15;">75%</div>
+            <div class="lbl">Cost Savings</div>
+        </div>
+        <div class="cover-stat">
+            <div class="num" style="color:#c084fc;">24 / 24</div>
+            <div class="lbl">Tests Passing</div>
+        </div>
+    </div>
+
+    <div class="card" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color:#e2e8f0; padding:12px 16px;">
+        <h4 style="color:#38bdf8; margin-bottom:4px;">🎯 Project Mission</h4>
+        <p style="color:#cbd5e1; font-size:11px; margin:0;">
+            Provide a complete, production-ready, autonomous concurrency controller that bridges the gap between reactive AWS Application Auto Scaling and expensive static over-provisioning.
+        </p>
+    </div>
+
+    <div class="cover-footer">
+        <div>Mini Project Presentation • Final Evaluation Report</div>
+        <div>GitHub: <strong>Nischal-S143/Warmify</strong> • October 2026</div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 2 — TABLE OF CONTENTS
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header dark">
+        <div class="num">📜</div>
+        <h2>Table of Contents — Project Blueprint</h2>
+        <div class="category">Navigation</div>
+    </div>
+    <div class="page-body">
+        <p>A systematic technical overview spanning introductory concepts to mathematical formulation and cloud implementation:</p>
+
+        <div class="toc-grid">
+            <div class="toc-item"><div class="toc-num">1</div><div class="toc-title">Background: Serverless & AWS Lambda</div><div class="toc-sub">Basics</div></div>
+            <div class="toc-item"><div class="toc-num">2</div><div class="toc-title">The Problem: Why Cold Starts Hurt</div><div class="toc-sub">Impact</div></div>
+            <div class="toc-item"><div class="toc-num">3</div><div class="toc-title">Existing Solutions: Why They Fall Short</div><div class="toc-sub">Bakery Analogy</div></div>
+            <div class="toc-item"><div class="toc-num">4</div><div class="toc-title">Our Solution: How Warmify Works</div><div class="toc-sub">Architecture</div></div>
+            <div class="toc-item"><div class="toc-num">5</div><div class="toc-title">System Architecture: Cloud Topology</div><div class="toc-sub">AWS Map</div></div>
+            <div class="toc-item"><div class="toc-num">6</div><div class="toc-title">System Architecture: 1-Minute Control Loop</div><div class="toc-sub">Feedback Loop</div></div>
+            <div class="toc-item"><div class="toc-num">7</div><div class="toc-title">Technology Stack: Ecosystem & Rationale</div><div class="toc-sub">Tech Stack</div></div>
+            <div class="toc-item"><div class="toc-num">8</div><div class="toc-title">Database Design: DynamoDB Schema</div><div class="toc-sub">Single-Table</div></div>
+            <div class="toc-item"><div class="toc-num">9</div><div class="toc-title">ML Features: 8-Dimensional Vector</div><div class="toc-sub">Time Encoding</div></div>
+            <div class="toc-item"><div class="toc-num">10</div><div class="toc-title">ML Theory: Pinball Loss & Quantiles</div><div class="toc-sub">Math</div></div>
+            <div class="toc-item"><div class="toc-num">11</div><div class="toc-title">ML Pipeline: Model Training & Models</div><div class="toc-sub">Q50/Q90/Q95</div></div>
+            <div class="toc-item"><div class="toc-num">12</div><div class="toc-title">Queuing Theory: Little's Law Container Sizing</div><div class="toc-sub">L = λ × W</div></div>
+            <div class="toc-item"><div class="toc-num">13</div><div class="toc-title">Safety Guardrails: 4-Layer Architecture</div><div class="toc-sub">Protection</div></div>
+            <div class="toc-item"><div class="toc-num">14</div><div class="toc-title">Safety Guardrails: Asymmetric Actuation</div><div class="toc-sub">Hysteresis</div></div>
+            <div class="toc-item"><div class="toc-num">15</div><div class="toc-title">Component Breakdown: The 4 Lambdas</div><div class="toc-sub">Services</div></div>
+            <div class="toc-item"><div class="toc-num">16</div><div class="toc-title">Frontend Dashboard: React 19 Console</div><div class="toc-sub">13 Components</div></div>
+            <div class="toc-item"><div class="toc-num">17</div><div class="toc-title">API Reference: 18 REST Endpoints</div><div class="toc-sub">Endpoints</div></div>
+            <div class="toc-item"><div class="toc-num">18</div><div class="toc-title">Benchmark Results: 6-Arm A/B Validation</div><div class="toc-sub">Experiments</div></div>
+            <div class="toc-item"><div class="toc-num">19</div><div class="toc-title">Cost Analysis: 75% Financial Savings</div><div class="toc-sub">ROI</div></div>
+            <div class="toc-item"><div class="toc-num">20</div><div class="toc-title">Testing: 24 Automated Unit & E2E Tests</div><div class="toc-sub">pytest</div></div>
+            <div class="toc-item"><div class="toc-num">21</div><div class="toc-title">Project Structure: Directory Tree</div><div class="toc-sub">Repository</div></div>
+            <div class="toc-item"><div class="toc-num">22</div><div class="toc-title">Quick Start: Local Simulation & AWS Deploy</div><div class="toc-sub">Guide</div></div>
+            <div class="toc-item"><div class="toc-num">23</div><div class="toc-title">Conclusion: Summary & Key Takeaways</div><div class="toc-sub">Wrap-up</div></div>
+            <div class="toc-item"><div class="toc-num">24</div><div class="toc-title">Back Cover: Q&A, Links & Discussion</div><div class="toc-sub">Credits</div></div>
+        </div>
+
+        <div class="callout callout-blue">
+            <div class="callout-title">💡 How to Read This Presentation</div>
+            Each slide is self-contained: top sections explain the intuitive "why" for non-technical colleagues, while middle and lower sections detail the mathematical proofs, code implementations, and cloud telemetry for engineers.
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 2 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 3 — BACKGROUND: SERVERLESS COMPUTING
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header blue">
+        <div class="num">1</div>
+        <h2>Background — Serverless & AWS Lambda</h2>
+        <div class="category">Foundations</div>
+    </div>
+    <div class="page-body">
+        <p>Before understanding Warmify, we must examine how modern cloud execution works:</p>
+
+        <div class="grid grid-2">
+            <div class="card card-indigo">
+                <h4>🖥️ Traditional Cloud (EC2 / VMs)</h4>
+                <p>You rent a virtual server running 24/7/365:</p>
+                <ul>
+                    <li>You pay fixed hourly rates even with <strong>0 visitors at 3 AM</strong></li>
+                    <li>You manage operating systems, security patches, scaling rules</li>
+                    <li>Scaling out takes <strong>3 to 8 minutes</strong> to boot new virtual machines</li>
+                </ul>
+            </div>
+            <div class="card card-green">
+                <h4>⚡ Serverless Computing (AWS Lambda)</h4>
+                <p>Cloud provider executes code strictly on demand:</p>
+                <ul>
+                    <li>Zero idle cost: pay strictly per 1 millisecond of execution</li>
+                    <li>AWS automatically provisions lightweight Firecracker microVMs</li>
+                    <li>Ideal for APIs, data streams, event-driven web applications</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="callout callout-blue">
+            <div class="callout-title">🍳 The Kitchen Analogy</div>
+            Instead of renting an entire restaurant building 24 hours a day, serverless is like hiring a ghost kitchen that cooks <em>only when an order arrives</em>. No orders = $0 bill. But if the kitchen was completely shut down and frozen when an order arrives, the customer waits for the stoves to fire up. That delay is the <strong>Cold Start</strong>.
+        </div>
+
+        <h3>Execution Lifecycle Comparison</h3>
+        <div class="grid grid-2">
+            <div class="card card-green">
+                <h4>🟢 Warm Container Execution</h4>
+                <p>Container already initialized in memory from a prior call:</p>
+                <ul>
+                    <li>Instant execution of user handler function</li>
+                    <li><strong>Latency: 5 to 50 ms</strong> (imperceptible to users)</li>
+                    <li>Reuses database pools and preloaded weights</li>
+                </ul>
+            </div>
+            <div class="card card-red">
+                <h4>🔴 Cold Start Execution</h4>
+                <p>No idle container exists when a concurrent request arrives:</p>
+                <ul>
+                    <li>Must download code package, start Python, run imports</li>
+                    <li><strong>Latency: 2,000 to 5,000 ms</strong> (severe 50×–100× spike)</li>
+                    <li>Damages conversion rates, user trust, and API SLAs</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 3 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 4 — THE PROBLEM: WHY COLD STARTS HURT
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header red">
+        <div class="num">2</div>
+        <h2>The Problem — Why Cold Starts Hurt</h2>
+        <div class="category">Problem Space</div>
+    </div>
+    <div class="page-body">
+        <p>A cold start is not a single delay — it is a 4-phase sequential initialization bottleneck:</p>
+
+        <div class="grid grid-2">
+            <div class="card card-amber">
+                <h4>Phase 1: MicroVM Allocation (~200ms)</h4>
+                <p>AWS allocates dedicated Firecracker CPU, memory, and virtual network tap device on physical host servers.</p>
+            </div>
+            <div class="card card-amber">
+                <h4>Phase 2: Code Retrieval & Unpack (~300ms)</h4>
+                <p>Deployment zip archive is fetched from Amazon S3 and decompressed into container storage.</p>
+            </div>
+            <div class="card card-amber">
+                <h4>Phase 3: Python Runtime Startup (~200ms)</h4>
+                <p>Python 3.12 interpreter initializes, resolves system environment variables and paths.</p>
+            </div>
+            <div class="card card-red">
+                <h4>Phase 4: Static Initialization (~1,500–3,000ms)</h4>
+                <p><strong>The Primary Bottleneck:</strong> Importing libraries (<code>torch</code>, <code>scikit-learn</code>, <code>boto3</code>), loading ML weights, establishing database connection pools.</p>
+            </div>
+        </div>
+
+        <h3>When Do Cold Starts Strike Production?</h3>
+        <table>
+            <thead>
+                <tr><th style="width:25%;">Scenario</th><th style="width:40%;">Technical Trigger</th><th style="width:35%;">Business Consequence</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Traffic Burst</strong></td><td>Concurrent requests exceed available warm instances</td><td>First wave of users suffers 3s delay</td></tr>
+                <tr><td><strong>Idle Expiration</strong></td><td>AWS reclaims containers after ~10–15 min inactivity</td><td>Off-peak users always encounter cold starts</td></tr>
+                <tr><td><strong>New Deployment</strong></td><td>Rolling update invalidates all warm containers</td><td>100% of initial requests trigger cold starts</td></tr>
+                <tr><td><strong>Diurnal Ramp</strong></td><td>Morning 8:00 AM rush arrives from zero overnight baseline</td><td>Major latency spike during peak login hour</td></tr>
+            </tbody>
+        </table>
+
+        <div class="grid grid-4">
+            <div class="stat-box"><div class="value red">2–5 s</div><div class="label">Cold Latency</div></div>
+            <div class="stat-box"><div class="value red">50×–100×</div><div class="label">Latency Penalty</div></div>
+            <div class="stat-box"><div class="value amber">18.6%</div><div class="label">Bursty Calls Hurt</div></div>
+            <div class="stat-box"><div class="value red">SLA Breach</div><div class="label">P95 / P99 Failure</div></div>
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 4 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 5 — EXISTING SOLUTIONS: WHY THEY FALL SHORT
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header amber">
+        <div class="num">3</div>
+        <h2>Existing Solutions — Why They Fall Short</h2>
+        <div class="category">Comparative Analysis</div>
+    </div>
+    <div class="page-body">
+        <div class="callout callout-amber">
+            <div class="callout-title">🥐 The Bakery Analogy: 4 Ways to Serve Fresh Croissants</div>
+            Baking a tray of croissants takes <strong>45 minutes</strong> (= the cold start time). How do different strategies handle 20 customers arriving at 8:00 AM?
+        </div>
+
+        <table>
+            <thead>
+                <tr><th style="width:20%;">Strategy</th><th style="width:40%;">What the System Does</th><th style="width:40%;">Customer Experience</th></tr>
+            </thead>
+            <tbody>
+                <tr class="row-bad"><td><strong>1. Pure On-Demand</strong></td><td>Waits until customer orders before turning on ovens</td><td>Customer waits <strong>45 minutes</strong> at the counter 😫</td></tr>
+                <tr><td><strong>2. Ping Warmer (Cron)</strong></td><td>Keeps exactly 1 croissant warm in the showcase</td><td>1st customer served fast; other 19 wait 45 minutes 😕</td></tr>
+                <tr><td><strong>3. AWS Auto-Scaling</strong></td><td>Sees 20 people in queue, <em>then</em> starts baking</td><td>Croissants ready at 8:45 AM — rush is already gone! 😐</td></tr>
+                <tr class="row-highlight"><td><strong>4. Warmify ⚡</strong></td><td>Knows 8 AM rush comes daily → bakes 20 croissants at 7:45 AM</td><td><strong>Zero wait time for all 20 customers! 🎉</strong></td></tr>
+            </tbody>
+        </table>
+
+        <h3>Why Each Conventional Solution Fails</h3>
+        <div class="grid grid-3">
+            <div class="card card-red">
+                <h4>🏓 Keep-Alive Pings</h4>
+                <p>Sends periodic ping every 5 minutes to keep <strong>1 container</strong> warm. Fails completely when 10 concurrent requests arrive simultaneously — 9 hit cold starts.</p>
+            </div>
+            <div class="card card-amber">
+                <h4>📈 Reactive Auto-Scaling</h4>
+                <p>CloudWatch alarms scale <em>after</em> traffic spikes. Because CloudWatch has a <strong>1 to 5 minute aggregation lag</strong>, scaling is always 2–3 minutes too late.</p>
+            </div>
+            <div class="card card-red">
+                <h4>🏦 Static Over-Provisioning</h4>
+                <p>Keep 10 warm containers 24/7 with AWS Provisioned Concurrency. Eliminates cold starts but costs <strong>$54.75/month</strong> wasting budget at 3 AM.</p>
+            </div>
+        </div>
+
+        <div class="callout callout-blue">
+            <div class="callout-title">🎯 The Opportunity</div>
+            We need an engine that is <strong>proactive</strong> (predicts traffic ahead of time), <strong>precise</strong> (warms the exact queue capacity needed), and <strong>frugal</strong> (avoids paying for idle servers).
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 5 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 6 — OUR SOLUTION: HOW WARMIFY WORKS
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header green">
+        <div class="num">4</div>
+        <h2>Our Solution — How Warmify Solves Cold Starts</h2>
+        <div class="category">Core Innovation</div>
+    </div>
+    <div class="page-body">
+        <div class="callout callout-green">
+            <div class="callout-title">⚡ The Core Idea in One Sentence</div>
+            Warmify uses <strong>Quantile Regression (Q90)</strong> to predict traffic 10 minutes ahead, applies <strong>Little's Law</strong> to calculate exact container concurrency, and routes decisions through <strong>4 Safety Guardrails</strong> before actuating AWS Provisioned Concurrency.
+        </div>
+
+        <h3>The 4-Stage Autonomous Pipeline (Runs Every 60 Seconds)</h3>
+        <div class="grid grid-2">
+            <div class="card card-blue">
+                <h4>📡 Stage 1: Ingest & Telemetry</h4>
+                <p>Collector Lambda runs every 1 minute via EventBridge cron:</p>
+                <ul>
+                    <li>Queries CloudWatch metrics: Invocations, Duration, Concurrency</li>
+                    <li>Parses CloudWatch Logs for <code>INIT_REPORT</code> to track cold starts</li>
+                    <li>Persists structured time-series snapshots to DynamoDB table</li>
+                </ul>
+            </div>
+            <div class="card card-purple">
+                <h4>🧠 Stage 2: Feature Engineering & ML</h4>
+                <p>Controller Lambda queries recent 90-minute history:</p>
+                <ul>
+                    <li>Extracts 8 features: lags (1, 5, 15, 60m), rolling avg, cyclical time</li>
+                    <li>Feeds vector to Gradient Boosting Quantile Regressor</li>
+                    <li>Outputs Q90 traffic forecast for <strong>T + 10 minutes</strong></li>
+                </ul>
+            </div>
+            <div class="card card-indigo">
+                <h4>📐 Stage 3: Queuing Theory Sizing</h4>
+                <p>Converts predicted traffic volume into required container count:</p>
+                <ul>
+                    <li>Applies Little's Law: <code>L = λ × W</code></li>
+                    <li>Arrival rate (RPS) × Average service duration (seconds)</li>
+                    <li>Rounds up: <code>Copies = ⌈ RPS × Duration ⌉</code></li>
+                </ul>
+            </div>
+            <div class="card card-green">
+                <h4>🛡️ Stage 4: Guardrails & Cloud Actuation</h4>
+                <p>Filters raw recommendation through safety defenses:</p>
+                <ul>
+                    <li>Clamps between Min Floor (1) and Max Cap (50)</li>
+                    <li>Applies Dead-Band hysteresis and Asymmetric Scale-Down</li>
+                    <li>Calls AWS API: <code>PutProvisionedConcurrencyConfig</code></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="grid grid-3">
+            <div class="stat-box"><div class="value green">100% Autonomous</div><div class="label">Zero Human Intervention</div></div>
+            <div class="stat-box"><div class="value blue">10-Min Horizon</div><div class="label">Proactive Pre-Warming</div></div>
+            <div class="stat-box"><div class="value purple">4 Safety Filters</div><div class="label">Crash & Budget Protection</div></div>
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 6 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 7 — SYSTEM ARCHITECTURE: CLOUD TOPOLOGY
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header blue">
+        <div class="num">5</div>
+        <h2>System Architecture — Cloud Topology</h2>
+        <div class="category">System Design</div>
+    </div>
+    <div class="page-body">
+        <p>Warmify operates entirely serverless within the AWS Cloud environment:</p>
+
+<div class="diagram">
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                           AWS CLOUD INFRASTRUCTURE                              │
+│                                                                                 │
+│   ┌───────────────┐   rate(1 min)    ┌──────────────────────────────────────┐   │
+│   │  EventBridge  │ ───────────────► │ COLLECTOR LAMBDA                     │   │
+│   │  Cron Rules   │                  │ - Scans CloudWatch Invocations/Logs  │   │
+│   └───────────────┘                  │ - Detects cold starts (INIT_REPORT)  │   │
+│                                      └──────────────────┬───────────────────┘   │
+│                                                         │ writes metric rows    │
+│                                                         ▼                       │
+│                                      ┌──────────────────────────────────────┐   │
+│                                      │ AMAZON DYNAMODB ("warmify-metrics")  │   │
+│                                      │ PK: function_name | SK: timestamp    │   │
+│                                      └──────────────────┬───────────────────┘   │
+│                                                         │ reads 90-min window   │
+│                                                         ▼                       │
+│   ┌───────────────┐   rate(1 min)    ┌──────────────────────────────────────┐   │
+│   │  EventBridge  │ ───────────────► │ CONTROLLER LAMBDA (THE BRAIN)        │   │
+│   │  Cron Rules   │                  │ 1. 8-Dim Feature Vector              │   │
+│   └───────────────┘                  │ 2. Scikit-Learn Quantile Model (Q90) │   │
+│                                      │ 3. Little's Law Container Sizing     │   │
+│                                      │ 4. 4-Layer Safety Guardrails         │   │
+│                                      └──────────────────┬───────────────────┘   │
+│                                                         │ PutProvisioned        │
+│                                                         │ ConcurrencyConfig     │
+│                                                         ▼                       │
+│   ┌──────────────────────────────┐   invokes warm pool  ┌───────────────────┐   │
+│   │ END USER REQUEST TRAFFIC     │ ───────────────────► │ TARGET LAMBDA     │   │
+│   │ (Instant response, 0ms cold) │                      │ (Alias: "prod")   │   │
+│   └──────────────────────────────┘                      └───────────────────┘   │
+│                                                                                 │
+│   ┌─────────────────────────────────────────────────────────────────────────┐   │
+│   │ FASTAPI BACKEND (Mangum Adapter on Lambda or Local Uvicorn)             │   │
+│   │ Exposes 18+ REST endpoints (/api/timeline, /api/scaling, /api/benchmark)│   │
+│   └────────────────────────────────────┬────────────────────────────────────┘   │
+└────────────────────────────────────────┼────────────────────────────────────────┘
+                                         │ JSON over HTTPS
+                                         ▼
+                             ┌───────────────────────┐
+                             │ REACT 19 UI DASHBOARD │
+                             │ Mission Control HUD   │
+                             └───────────────────────┘
+</div>
+
+        <div class="grid grid-2">
+            <div class="card card-blue">
+                <h4>🔒 Decoupled Non-Intrusive Design</h4>
+                <p>The target application function code is <strong>never modified</strong>. Warmify monitors CloudWatch externally and actuates standard AWS Lambda APIs.</p>
+            </div>
+            <div class="card card-purple">
+                <h4>🛡️ Zero Single-Point-of-Failure</h4>
+                <p>If Warmify controller ever stops, the target Lambda simply reverts to standard AWS on-demand scaling with <strong>zero application downtime</strong>.</p>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 7 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 8 — SYSTEM ARCHITECTURE: 1-MINUTE CONTROL LOOP
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header blue">
+        <div class="num">6</div>
+        <h2>System Architecture — 1-Minute Control Loop</h2>
+        <div class="category">Runtime Execution</div>
+    </div>
+    <div class="page-body">
+        <p>The system operates an automated closed-loop feedback cycle every 60 seconds:</p>
+
+        <table>
+            <thead>
+                <tr><th style="width:12%;">Timeline</th><th style="width:25%;">Component</th><th style="width:40%;">Actions Executed</th><th style="width:23%;">Output Artifact</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>T + 00s</strong></td><td>Target Lambda</td><td>Processes live incoming user invocations</td><td>CloudWatch Raw Metrics</td></tr>
+                <tr><td><strong>T + 15s</strong></td><td>Collector Lambda</td><td>Fetches 1-min sum, P99 duration, cold start logs</td><td>DynamoDB Metric Record</td></tr>
+                <tr><td><strong>T + 30s</strong></td><td>Controller Lambda</td><td>Extracts 90-min rolling history from DynamoDB</td><td>8-Dim Feature Vector</td></tr>
+                <tr><td><strong>T + 40s</strong></td><td>ML Engine</td><td>Evaluates Q90 model + Little's Law formula</td><td>Raw Concurrency Target</td></tr>
+                <tr><td><strong>T + 45s</strong></td><td>Safety Guardrails</td><td>Filters through Floor, Cap, Deadband, Dampener</td><td>Final Concurrency Value</td></tr>
+                <tr class="row-highlight"><td><strong>T + 50s</strong></td><td>AWS Lambda API</td><td>Actuates <code>PutProvisionedConcurrencyConfig</code></td><td>Containers Pre-Warmed</td></tr>
+                <tr class="row-highlight"><td><strong>T + 60s</strong></td><td>Live Users</td><td>Next minute burst arrives to warm microVMs</td><td><strong>0ms Cold Start!</strong></td></tr>
+            </tbody>
+        </table>
+
+        <h3>Handling Real-World Cloud Latency & Delays</h3>
+        <div class="grid grid-3">
+            <div class="card card-indigo">
+                <h4>⏱️ Metric Ingestion Delay</h4>
+                <p>CloudWatch metrics experience a 1–2 min publishing lag. Warmify explicitly uses lag features (lag_1, lag_5) so the model is trained natively on delayed observations.</p>
+            </div>
+            <div class="card card-green">
+                <h4>🔄 Asymmetric Pre-Allocation</h4>
+                <p>AWS takes ~30–60s to spin up provisioned instances. Predicting <strong>10 minutes ahead</strong> gives AWS ample lead time to instantiate warm microVMs before traffic hits.</p>
+            </div>
+            <div class="card card-amber">
+                <h4>📝 Decision Audit Logging</h4>
+                <p>Every single cycle writes a scaling decision record to DynamoDB detailing raw prediction, guardrails triggered, and resulting concurrency for full transparency.</p>
+            </div>
+        </div>
+
+        <div class="callout callout-green">
+            <div class="callout-title">✅ Operational Guarantee</div>
+            The 1-minute execution finishes in under <strong>450 milliseconds</strong>, keeping Controller Lambda AWS compute costs below $0.05 per month.
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 8 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 9 — TECHNOLOGY STACK: ECOSYSTEM & RATIONALE
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header purple">
+        <div class="num">7</div>
+        <h2>Technology Stack — Ecosystem & Rationale</h2>
+        <div class="category">Tech Stack</div>
+    </div>
+    <div class="page-body">
+        <p>Production-grade technologies chosen specifically for serverless constraints and speed:</p>
+
+        <div class="grid grid-2">
+            <div class="card card-blue">
+                <h4>🐍 Backend & Machine Learning</h4>
+                <ul>
+                    <li><strong>Python 3.12:</strong> Modern runtime with fast dictionary lookups and typing</li>
+                    <li><strong>FastAPI 0.115:</strong> High-speed async REST API with automatic Swagger docs</li>
+                    <li><strong>scikit-learn 1.5:</strong> Lightweight Gradient Boosting with Quantile Loss</li>
+                    <li><strong>NumPy 2.1:</strong> Vectorized mathematical operations and circular encoding</li>
+                    <li><strong>Mangum:</strong> Seamless ASGI-to-Lambda API Gateway proxy adapter</li>
+                </ul>
+            </div>
+            <div class="card card-purple">
+                <h4>☁️ Cloud & Infrastructure</h4>
+                <ul>
+                    <li><strong>AWS Lambda:</strong> Serverless compute hosting all 4 application roles</li>
+                    <li><strong>Amazon DynamoDB:</strong> Single-digit millisecond latency NoSQL store</li>
+                    <li><strong>Amazon EventBridge:</strong> Reliable 1-minute cron orchestrator</li>
+                    <li><strong>Amazon CloudWatch:</strong> System telemetry, percentiles, and log stream</li>
+                    <li><strong>AWS SAM (CLI):</strong> Declarative Infrastructure as Code (template.yaml)</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>Architectural Selection Justifications</h3>
+        <table>
+            <thead>
+                <tr><th style="width:25%;">Technology Choice</th><th style="width:35%;">Alternatives Considered</th><th style="width:40%;">Why We Chose This</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>scikit-learn GBRT</strong></td><td>PyTorch / TensorFlow / Prophet</td><td>Model is &lt;2MB, trains in 4 seconds, runs inference in <strong>&lt;3ms</strong> inside Lambda</td></tr>
+                <tr><td><strong>Amazon DynamoDB</strong></td><td>PostgreSQL (RDS) / MongoDB</td><td>Fully serverless, zero connection pool exhaustion, native sub-10ms queries, built-in TTL</td></tr>
+                <tr><td><strong>FastAPI + Vite</strong></td><td>Django / Flask + Webpack</td><td>Zero boilerplate, native async event loops, compiled frontend bundle served directly</td></tr>
+                <tr><td><strong>AWS SAM</strong></td><td>Terraform / Serverless Framework</td><td>Native CloudFormation integration, exact support for Lambda aliases & Provisioned Concurrency</td></tr>
+            </tbody>
+        </table>
+
+        <div class="grid grid-4">
+            <div class="stat-box"><div class="value purple">&lt; 3 ms</div><div class="label">ML Inference</div></div>
+            <div class="stat-box"><div class="value blue">&lt; 15 MB</div><div class="label">Lambda Package</div></div>
+            <div class="stat-box"><div class="value green">React 19</div><div class="label">Latest UI Engine</div></div>
+            <div class="stat-box"><div class="value amber">Zero DB Ops</div><div class="label">Serverless Storage</div></div>
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 9 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 10 — DATABASE DESIGN: DYNAMODB SCHEMA
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header blue">
+        <div class="num">8</div>
+        <h2>Database Design — DynamoDB Schema</h2>
+        <div class="category">Data Architecture</div>
+    </div>
+    <div class="page-body">
+        <p>Warmify employs an optimized <strong>Single-Table Design</strong> in DynamoDB table <code>warmify-metrics</code>:</p>
+
+        <table>
+            <thead>
+                <tr><th style="width:25%;">Key Component</th><th style="width:20%;">Attribute Name</th><th style="width:15%;">Type</th><th style="width:40%;">Operational Function</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Partition Key (PK)</strong></td><td><code>function_name</code></td><td>String</td><td>Partitions data by Lambda service (e.g., <code>"warmify-demo"</code>)</td></tr>
+                <tr><td><strong>Sort Key (SK)</strong></td><td><code>timestamp</code></td><td>String</td><td>ISO-8601 UTC timestamp enabling chronological range queries</td></tr>
+            </tbody>
+        </table>
+
+        <div class="callout callout-blue">
+            <div class="callout-title">💡 Why This Key Design Enables O(log N) Performance</div>
+            Querying <code>PK = "warmify-demo" AND SK BETWEEN (T-90m, T)</code> retrieves the exact sliding feature window in a single DynamoDB query with zero table scans. Sub-5 millisecond response.
+        </div>
+
+        <h3>3 Distinct Entity Models Stored in One Table</h3>
+        <div class="grid grid-3">
+            <div class="card card-blue">
+                <h4>📊 1. Metric Records</h4>
+                <p>Written every 1 min by Collector:</p>
+                <ul>
+                    <li><code>invocations</code> (Count)</li>
+                    <li><code>avg_duration_ms</code> (Latency)</li>
+                    <li><code>p99_duration_ms</code> (Tail)</li>
+                    <li><code>cold_start_count</code> (Inits)</li>
+                    <li><code>provisioned_concurrency</code></li>
+                </ul>
+            </div>
+            <div class="card card-purple">
+                <h4>🧠 2. Decision Records</h4>
+                <p>Written by Controller every cycle:</p>
+                <ul>
+                    <li><code>features</code> (8-dim vector)</li>
+                    <li><code>predictions</code> (Q50, Q90, Q95)</li>
+                    <li><code>raw_copies</code> (pre-guardrail)</li>
+                    <li><code>final_copies</code> (post-guardrail)</li>
+                    <li><code>guardrail_reasons</code> (audit)</li>
+                </ul>
+            </div>
+            <div class="card card-green">
+                <h4>📈 3. Evaluation Records</h4>
+                <p>Written during benchmark runs:</p>
+                <ul>
+                    <li><code>experiment_arm</code> (Strategy)</li>
+                    <li><code>cold_start_pct</code> (Rate)</li>
+                    <li><code>p95_latency_ms</code> (P95)</li>
+                    <li><code>estimated_cost_usd</code></li>
+                    <li><code>total_invocations</code></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="callout callout-green">
+            <div class="callout-title">💾 Local Simulation Mode Support</div>
+            When running locally without AWS credentials, Warmify automatically routes through <code>lambdas/api/local_store.py</code>, storing records in <code>data/warmify_local_data.json</code> with identical query semantics.
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 10 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 11 — ML FEATURE ENGINEERING: 8-DIMENSIONAL VECTOR
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header purple">
+        <div class="num">9</div>
+        <h2>ML Feature Engineering — 8-Dim Vector</h2>
+        <div class="category">Machine Learning</div>
+    </div>
+    <div class="page-body">
+        <p>Raw timestamps and invocation counts are transformed into an informative 8-dimensional feature vector:</p>
+
+        <table>
+            <thead>
+                <tr><th style="width:8%;">#</th><th style="width:22%;">Feature Key</th><th style="width:35%;">Mathematical Definition</th><th style="width:35%;">Predictive Value</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>1</strong></td><td><code>lag_1</code></td><td>Invocations at T - 1 minute</td><td>Immediate current traffic momentum</td></tr>
+                <tr><td><strong>2</strong></td><td><code>lag_5</code></td><td>Invocations at T - 5 minutes</td><td>Short-term acceleration / deceleration</td></tr>
+                <tr><td><strong>3</strong></td><td><code>lag_15</code></td><td>Invocations at T - 15 minutes</td><td>Quarter-hour trend direction</td></tr>
+                <tr><td><strong>4</strong></td><td><code>lag_60</code></td><td>Invocations at T - 60 minutes</td><td>Hour-over-hour baseline level</td></tr>
+                <tr><td><strong>5</strong></td><td><code>rolling_avg_15</code></td><td>Mean of [T - 15m to T]</td><td>Dampens micro-jitter and transient noise</td></tr>
+                <tr><td><strong>6</strong></td><td><code>sin_time</code></td><td>sin(2π × minute_of_day / 1440)</td><td>Continuous circular diurnal time coordinate</td></tr>
+                <tr><td><strong>7</strong></td><td><code>cos_time</code></td><td>cos(2π × minute_of_day / 1440)</td><td>Orthogonal circular time coordinate</td></tr>
+                <tr><td><strong>8</strong></td><td><code>day_of_week</code></td><td>Integer [0 = Monday ... 6 = Sunday]</td><td>Captures weekday vs. weekend variances</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Solving "The Midnight Discontinuity Problem"</h3>
+        <div class="grid grid-2">
+            <div class="card card-red">
+                <h4>❌ Naive Linear Time: Hours 0–23</h4>
+                <p>If time is represented as integers 0 to 23, <strong>11:59 PM (hour 23)</strong> and <strong>12:01 AM (hour 0)</strong> appear <strong>23 units apart</strong>! The ML model assumes a massive cliff instead of a 2-minute transition.</p>
+            </div>
+            <div class="card card-green">
+                <h4>✅ Circular Trigonometric Encoding</h4>
+                <p>Projecting time onto a unit circle using sine and cosine makes 11:59 PM and 12:01 AM geometrically adjacent. Distance: <code>||(sin, cos)₁ - (sin, cos)₂|| ≈ 0.008</code>. Seamless continuity across midnight.</p>
+            </div>
+        </div>
+
+        <div class="code">
+<span class="kw">def</span> <span class="fn">_encode_time</span>(dt: datetime) -> tuple[float, float]:
+    <span class="cm"># Encode time-of-day onto a continuous 24-hour circle</span>
+    minutes = dt.hour * <span class="num">60</span> + dt.minute                   <span class="cm"># 0 to 1439</span>
+    sin_val = math.sin(<span class="num">2</span> * math.pi * minutes / <span class="num">1440.0</span>)
+    cos_val = math.cos(<span class="num">2</span> * math.pi * minutes / <span class="num">1440.0</span>)
+    <span class="kw">return</span> <span class="fn">round</span>(sin_val, <span class="num">6</span>), <span class="fn">round</span>(cos_val, <span class="num">6</span>)
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 11 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 12 — ML THEORY: PINBALL LOSS & QUANTILES
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header purple">
+        <div class="num">10</div>
+        <h2>ML Theory — Pinball Loss & Quantiles</h2>
+        <div class="category">Mathematical Formulation</div>
+    </div>
+    <div class="page-body">
+        <h3>Why Mean (MSE) Regression Fails Serverless Auto-Scaling</h3>
+        <p>Standard regression models minimize Mean Squared Error (MSE), predicting the <strong>expected average</strong>. But for capacity provisioning, predicting the mean is fundamentally flawed:</p>
+
+        <div class="callout callout-red">
+            <div class="callout-title">⚠️ The Mathematical Defect of Mean Predictions</div>
+            If a model predicts the mean (100 requests), then by definition of statistical distributions, <strong>~50% of real requests will exceed 100</strong>! Every request in that 50% surplus encounters cold starts. We must predict the <em>upper envelope</em>.
+        </div>
+
+        <h3>Quantile Regression with Pinball Loss</h3>
+        <div class="formula-box">
+            <div class="label">Pinball Loss Function L_α(y, ŷ)</div>
+            <div class="formula">L_α(y, ŷ) = max( α · (y − ŷ), &nbsp; (1 − α) · (ŷ − y) )</div>
+            <div class="desc">Where y = actual incoming traffic, ŷ = predicted traffic, α = target quantile (0.90 for Q90)</div>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-purple">
+                <h4>⚖️ Asymmetric Error Penalty (When α = 0.90)</h4>
+                <ul>
+                    <li><strong>Under-predicting (y > ŷ):</strong> Penalty = <code>0.90 × error</code></li>
+                    <li><strong>Over-predicting (y < ŷ):</strong> Penalty = <code>0.10 × error</code></li>
+                    <li>Under-prediction is penalized <strong>9× more heavily</strong> than over-prediction!</li>
+                </ul>
+            </div>
+            <div class="card card-green">
+                <h4>🛡️ Resulting Operational Behavior</h4>
+                <ul>
+                    <li>The model deliberately shifts above the mean line</li>
+                    <li>Outputs a ceiling where <strong>90% of actual points fall below ŷ</strong></li>
+                    <li>Provides built-in safety buffer against unexpected burst waves</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="callout callout-green">
+            <div class="callout-title">🎯 The Engineering Insight</div>
+            Quantile loss mathematically models the real business trade-off: a cold start (under-provisioning) costs customer retention, while a slightly warm idle container (over-provisioning) costs fractions of a penny.
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 12 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 13 — ML PIPELINE: MODEL TRAINING & FLEET
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header purple">
+        <div class="num">11</div>
+        <h2>ML Pipeline — Model Training & Fleet</h2>
+        <div class="category">Model Architecture</div>
+    </div>
+    <div class="page-body">
+        <p>Warmify trains and maintains a multi-quantile model fleet for diverse application SLAs:</p>
+
+        <table>
+            <thead>
+                <tr><th style="width:15%;">Model</th><th style="width:15%;">Quantile (α)</th><th style="width:35%;">Statistical Definition</th><th style="width:35%;">Target Workload Profile</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Q50</strong></td><td>0.50 (Median)</td><td>50% of traffic falls below prediction</td><td>Cost-constrained non-critical internal tools</td></tr>
+                <tr class="row-highlight"><td><strong>Q90 ⭐</strong></td><td>0.90 (90th)</td><td>90% of traffic peaks safely covered</td><td><strong>Production Default:</strong> Optimal SLA vs. Cost</td></tr>
+                <tr><td><strong>Q95</strong></td><td>0.95 (95th)</td><td>95% of traffic peaks safely covered</td><td>High-consequence payments / checkout APIs</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Hyperparameter Configuration & Scikit-Learn Training</h3>
+        <div class="code">
+<span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> GradientBoostingRegressor
+
+<span class="cm"># Train Gradient Boosting Regressor with Pinball Quantile Loss</span>
+model_q90 = GradientBoostingRegressor(
+    loss=<span class="str">"quantile"</span>,        <span class="cm"># Uses Pinball Loss instead of squared error</span>
+    alpha=<span class="num">0.90</span>,             <span class="cm"># Target 90th percentile envelope</span>
+    n_estimators=<span class="num">200</span>,       <span class="cm"># 200 boosting iterations (trees)</span>
+    max_depth=<span class="num">5</span>,            <span class="cm"># Maximum tree depth for non-linear interactions</span>
+    learning_rate=<span class="num">0.05</span>,     <span class="cm"># Conservatively small step size for generalization</span>
+    subsample=<span class="num">0.80</span>,         <span class="cm"># Stochastic gradient boosting (80% batching)</span>
+    random_state=<span class="num">42</span>
+)
+model_q90.fit(X_train, y_train)
+        </div>
+
+        <div class="grid grid-3">
+            <div class="card card-purple">
+                <h4>💾 Compact Serialization</h4>
+                <p>Saved as lightweight <code>.pkl</code> files under <code>lambdas/controller/models/</code>. Total file size is <strong>&lt; 1.8 MB</strong>.</p>
+            </div>
+            <div class="card card-amber">
+                <h4>🛡️ Heuristic Fallback</h4>
+                <p>If model files are unreadable, Controller automatically falls back to an Exponentially Weighted Moving Average (EWMA) predictor.</p>
+            </div>
+            <div class="card card-green">
+                <h4>🔄 On-Demand Retraining</h4>
+                <p>Triggered via <code>scripts/train_model.py</code> or API endpoint <code>POST /api/models/retrain</code> with live DynamoDB data.</p>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 13 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 14 — QUEUING THEORY: LITTLE'S LAW SIZING
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header blue">
+        <div class="num">12</div>
+        <h2>Queuing Theory — Little's Law Sizing</h2>
+        <div class="category">Capacity Mathematics</div>
+    </div>
+    <div class="page-body">
+        <p>The ML model predicts future request volume (RPM). But AWS needs to know <em>how many microVM containers</em> to maintain warm. We solve this using <strong>Little's Law</strong>.</p>
+
+        <div class="grid grid-2">
+            <div class="formula-box">
+                <div class="label">John Little's Theorem (1961)</div>
+                <div class="formula">L = λ × W</div>
+                <div class="desc">
+                    <strong>L:</strong> Average concurrency in system<br>
+                    <strong>λ:</strong> Arrival rate (req / sec)<br>
+                    <strong>W:</strong> Average execution duration (sec)
+                </div>
+            </div>
+            <div class="formula-box">
+                <div class="label">Warmify Container Sizing Formula</div>
+                <div class="formula">C = ⌈ (RPM / 60) × (D_ms / 1000) × M ⌉</div>
+                <div class="desc">
+                    <strong>C:</strong> Concurrent Warm Containers<br>
+                    <strong>⌈ ⌉:</strong> Ceiling function (never under-size)<br>
+                    <strong>M:</strong> Safety headroom margin (1.0 default)
+                </div>
+            </div>
+        </div>
+
+        <h3>Numerical Walkthrough Example</h3>
+        <table>
+            <thead>
+                <tr><th style="width:20%;">Step</th><th style="width:40%;">Parameter & Value</th><th style="width:40%;">Calculation & Operational Logic</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>1. ML Forecast</strong></td><td>Predicted RPM = <strong>600 requests / min</strong></td><td>Q90 model output for 10 minutes ahead</td></tr>
+                <tr><td><strong>2. Arrival Rate</strong></td><td>λ = 600 ÷ 60 = <strong>10.0 req / sec</strong></td><td>Convert minutes to seconds arrival velocity</td></tr>
+                <tr><td><strong>3. Service Time</strong></td><td>W = <strong>200 ms</strong> = 0.20 seconds</td><td>Average Lambda execution duration from CloudWatch</td></tr>
+                <tr><td><strong>4. Little's Law</strong></td><td>L = 10.0 req/sec × 0.20 sec = <strong>2.0</strong></td><td>Theoretical continuous concurrent containers required</td></tr>
+                <tr class="row-highlight"><td><strong>5. Cloud Actuation</strong></td><td>Target = <strong>⌈ 2.0 ⌉ = 2 warm containers</strong></td><td>Sets provisioned concurrency on "prod" alias</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code">
+<span class="kw">def</span> <span class="fn">_littles_law</span>(predicted_rpm: float, avg_duration_sec: float, margin: float = <span class="num">1.0</span>) -> int:
+    <span class="cm"># Apply Little's Law: Concurrency = Arrival_Rate * Service_Time</span>
+    rps = <span class="fn">float</span>(predicted_rpm) / <span class="num">60.0</span>
+    copies = math.ceil(rps * <span class="fn">float</span>(avg_duration_sec) * <span class="fn">float</span>(margin))
+    <span class="kw">return</span> <span class="fn">max</span>(<span class="num">1</span>, copies)  <span class="cm"># Maintain at least 1 warm floor</span>
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 14 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 15 — SAFETY GUARDRAILS: 4-LAYER DEFENSE
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header amber">
+        <div class="num">13</div>
+        <h2>Safety Guardrails — 4-Layer Defense</h2>
+        <div class="category">Reliability Engineering</div>
+    </div>
+    <div class="page-body">
+        <p>Raw ML predictions must <strong>never</strong> directly control cloud infrastructure. Warmify filters every recommendation through 4 deterministic defense guardrails:</p>
+
+<div class="diagram">
+  [ML Prediction] ──► [Little's Law] ──► Raw Recommendation (e.g. 47 containers)
+                                                │
+                                                ▼
+  ┌─────────────────────────────────────────────────────────────────────────────┐
+  │ LAYER 1: MINIMUM FLOOR GUARDRAIL                                            │
+  │ Formula: max(raw_copies, MinProvisionedConcurrency)                         │
+  │ Effect: Guarantees at least 1 warm instance 24/7 (Never scales to zero)     │
+  └─────────────────────────────────────┬───────────────────────────────────────┘
+                                        │ (Passed: 47 >= 1)
+                                        ▼
+  ┌─────────────────────────────────────────────────────────────────────────────┐
+  │ LAYER 2: MAXIMUM BUDGET CAP GUARDRAIL                                       │
+  │ Formula: min(raw_copies, MaxProvisionedConcurrency)                         │
+  │ Effect: Hard ceiling (default 50) protects AWS bill from runaway ML / DDoS  │
+  └─────────────────────────────────────┬───────────────────────────────────────┘
+                                        │ (Passed: 47 <= 50)
+                                        ▼
+  ┌─────────────────────────────────────────────────────────────────────────────┐
+  │ LAYER 3: DEAD-BAND HYSTERESIS GUARDRAIL                                     │
+  │ Condition: If |target - current| < DeadBandThreshold (default 2)            │
+  │ Effect: Suppresses minor 1-unit oscillations (Prevents infrastructure churn)│
+  └─────────────────────────────────────┬───────────────────────────────────────┘
+                                        │ (If current=46, |47-46|=1 < 2 -> KEEP 46!)
+                                        ▼
+  ┌─────────────────────────────────────────────────────────────────────────────┐
+  │ LAYER 4: ASYMMETRIC GRADUAL SCALE-DOWN GUARDRAIL                            │
+  │ Scale UP: Instantaneous (0 delay)  |  Scale DOWN: Max 1 container / minute  │
+  │ Effect: Prevents dropping warm capacity during momentary traffic pauses     │
+  └─────────────────────────────────────┬───────────────────────────────────────┘
+                                        │
+                                        ▼
+            Final Actuated Concurrency (Submitted to AWS Lambda API)
+</div>
+
+        <div class="callout callout-green">
+            <div class="callout-title">🛡️ Defense in Depth Principle</div>
+            Even in the event of total model corruption, corrupt training data, or extreme synthetic traffic surges, these mathematical guardrails guarantee system stability and cost predictability.
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 15 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 16 — SAFETY GUARDRAILS: ASYMMETRIC ACTUATION
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header amber">
+        <div class="num">14</div>
+        <h2>Safety Guardrails — Asymmetric Actuation</h2>
+        <div class="category">Guardrail Mechanics</div>
+    </div>
+    <div class="page-body">
+        <h3>Configurable Parameters Table</h3>
+        <table>
+            <thead>
+                <tr><th style="width:25%;">Parameter</th><th style="width:15%;">Default</th><th style="width:30%;">Operational Role</th><th style="width:30%;">Failure Mode Prevented</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>MinProvisionedConcurrency</code></td><td><code>1</code></td><td>Absolute floor for warm containers</td><td>Cold starts on baseline healthchecks / low traffic</td></tr>
+                <tr><td><code>MaxProvisionedConcurrency</code></td><td><code>50</code></td><td>Absolute ceiling on concurrency</td><td>Runaway AWS billing during DDoS or anomalies</td></tr>
+                <tr><td><code>DeadBandThreshold</code></td><td><code>2</code></td><td>Minimum required change to trigger AWS update</td><td>Thrashing (oscillating 5→6→5→6 every minute)</td></tr>
+                <tr><td><code>ScaleDownStep</code></td><td><code>1</code></td><td>Maximum downward decrement per cycle</td><td>Dropping instances during momentary traffic dips</td></tr>
+            </tbody>
+        </table>
+
+        <h3>The Asymmetric Scaling Principle (Why UP ≠ DOWN)</h3>
+        <div class="grid grid-2">
+            <div class="card card-green">
+                <h4>⚡ Scale UP: Instantaneous (Zero Delay)</h4>
+                <p>When incoming traffic spikes, Warmify immediately commands the full required increase (e.g., from 3 to 18 copies) in a single API call.</p>
+                <p><strong>Rationale:</strong> Latency SLAs are fragile. Under-provisioning causes immediate customer pain. Speed is paramount.</p>
+            </div>
+            <div class="card card-amber">
+                <h4>🐢 Scale DOWN: Gradual Step (1 copy / min)</h4>
+                <p>When traffic subsides, Warmify refuses to immediately terminate surplus containers. It reduces capacity by at most 1 container per minute.</p>
+                <p><strong>Rationale:</strong> Real web traffic is bursty. A 30-second quiet lull is often followed by a secondary wave. Gradual release prevents whiplash.</p>
+            </div>
+        </div>
+
+        <div class="code">
+<span class="cm"># Gradual scale-down logic from lambdas/controller/app.py</span>
+<span class="kw">if</span> target_copies &lt; current_copies:
+    final_copies = <span class="fn">max</span>(target_copies, current_copies - scale_down_step)
+    reason = f<span class="str">"Gradual scale-down limited to {final_copies} (target was {target_copies})"</span>
+<span class="kw">else</span>:
+    final_copies = target_copies  <span class="cm"># Scale UP immediately without restriction</span>
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 16 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 17 — COMPONENT BREAKDOWN: THE 4 LAMBDAS
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header blue">
+        <div class="num">15</div>
+        <h2>Component Breakdown — The 4 Lambdas</h2>
+        <div class="category">Microservices</div>
+    </div>
+    <div class="page-body">
+        <p>The codebase is architected into 4 specialized serverless services:</p>
+
+        <div class="grid grid-2">
+            <div class="card card-amber">
+                <h4>🎯 1. Demo Target Lambda (<code>lambdas/demo/app.py</code>)</h4>
+                <p><strong>The "Patient":</strong> Simulates a realistic production microservice with heavy startup:</p>
+                <ul>
+                    <li>Generates 200,000 SHA-256 hashes during static module load</li>
+                    <li>Emulates PyTorch / TensorFlow dependency cold startup (<strong>2.5–3.5s</strong>)</li>
+                    <li>Warm execution time: <strong>&lt; 1 ms</strong></li>
+                    <li>Returns container ID, init duration, and invocation duration</li>
+                </ul>
+            </div>
+            <div class="card card-blue">
+                <h4>📡 2. Collector Lambda (<code>lambdas/collector/app.py</code>)</h4>
+                <p><strong>The "Senses":</strong> Scheduled every 1 minute via EventBridge cron:</p>
+                <ul>
+                    <li>Queries CloudWatch for Invocations (Sum), Duration (Avg/P99), Concurrency</li>
+                    <li>Scans CloudWatch Logs for <code>INIT_REPORT</code> strings to count cold starts</li>
+                    <li>Reads live Provisioned Concurrency state from Lambda Control Plane</li>
+                    <li>Writes normalized time-series records to DynamoDB table</li>
+                </ul>
+            </div>
+            <div class="card card-purple">
+                <h4>🧠 3. Controller Lambda (<code>lambdas/controller/app.py</code>)</h4>
+                <p><strong>The "Brain":</strong> Autonomous prediction & scaling engine:</p>
+                <ul>
+                    <li>Fetches 90-minute sliding window from DynamoDB</li>
+                    <li>Builds 8-dimensional feature vector (lags, rolling avg, circular time)</li>
+                    <li>Evaluates Quantile models (Q50, Q90, Q95) & Little's Law formula</li>
+                    <li>Applies 4 guardrails & calls <code>PutProvisionedConcurrencyConfig</code></li>
+                </ul>
+            </div>
+            <div class="card card-green">
+                <h4>🖥️ 4. FastAPI Backend (<code>lambdas/api/app.py</code>)</h4>
+                <p><strong>The "Voice":</strong> Unified API & static web host:</p>
+                <ul>
+                    <li>Serves 18+ endpoints for timeline, scaling state, benchmarks, and fleet</li>
+                    <li>Runs on AWS via <strong>Mangum</strong> adapter or locally via <strong>Uvicorn</strong></li>
+                    <li>Includes fallback storage engine (<code>local_store.py</code>) for zero-cloud testing</li>
+                    <li>Serves pre-compiled React 19 UI bundle with interactive docs at <code>/docs</code></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 17 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 18 — FRONTEND DASHBOARD: REACT 19 CONSOLE
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header green">
+        <div class="num">16</div>
+        <h2>Frontend Dashboard — React 19 Console</h2>
+        <div class="category">Mission Control UI</div>
+    </div>
+    <div class="page-body">
+        <p>The UI is an aerospace-inspired dark-mode console built with <strong>React 19 + Vite 8</strong>:</p>
+
+        <table>
+            <thead>
+                <tr><th style="width:25%;">Component</th><th style="width:25%;">Source File</th><th style="width:50%;">Real-Time Visualization Role</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>🌐 HolographicGlobe</strong></td><td><code>HolographicGlobe.jsx</code></td><td>Interactive 2D canvas globe visualizing simulated global traffic ingress</td></tr>
+                <tr><td><strong>🔮 PredictionHorizon</strong></td><td><code>PredictionHorizon.jsx</code></td><td>Telemetry chart comparing actual traffic against Q50/Q90/Q95 forecast bands</td></tr>
+                <tr><td><strong>📡 ServerlessTopology</strong></td><td><code>ServerlessTopology.jsx</code></td><td>Visual container cluster diagram showing warm vs active vs cold instances</td></tr>
+                <tr><td><strong>📊 BenchmarkView</strong></td><td><code>BenchmarkView.jsx</code></td><td>Side-by-side A/B evaluation matrix comparing all 6 concurrency strategies</td></tr>
+                <tr><td><strong>📈 CloudWatchTelemetry</strong></td><td><code>CloudWatchTelemetryView.jsx</code></td><td>Live latency percentiles (P50, P90, P95, P99), error rates, throughput</td></tr>
+                <tr><td><strong>⚙️ ConfigModal</strong></td><td><code>ConfigModal.jsx</code></td><td>Interactive modal to adjust guardrails (Min/Max, Deadband, Active Quantile)</td></tr>
+                <tr><td><strong>🚨 ScalingAnomalyCard</strong></td><td><code>ScalingAnomalyCard.jsx</code></td><td>Anomaly alert badge showing model divergences and guardrail interventions</td></tr>
+                <tr><td><strong>🚢 FunctionFleet</strong></td><td><code>FunctionFleet.jsx</code></td><td>Fleet overview managing multiple serverless target microservices</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Frontend Engineering Tokens</h3>
+        <div class="grid grid-4">
+            <div class="stat-box"><div class="value green">React 19.2</div><div class="label">Modern UI Core</div></div>
+            <div class="stat-box"><div class="value blue">Vite 8.3</div><div class="label">Instant HMR Build</div></div>
+            <div class="stat-box"><div class="value purple">Lucide Icons</div><div class="label">Vector Iconography</div></div>
+            <div class="stat-box"><div class="value amber">25 KB CSS</div><div class="label">Zero External Bloat</div></div>
+        </div>
+
+        <div class="callout callout-blue">
+            <div class="callout-title">🖥️ Single-Binary Serving</div>
+            When building for production (<code>npm run build</code> in <code>ui/</code>), compiled static assets are placed into <code>frontend/</code> and served directly by the FastAPI backend. One single port (8000) serves both API and UI.
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 18 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 19 — API REFERENCE: 18 REST ENDPOINTS
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header dark">
+        <div class="num">17</div>
+        <h2>API Reference — 18 REST Endpoints</h2>
+        <div class="category">API Surface</div>
+    </div>
+    <div class="page-body">
+        <p>Comprehensive OpenAPI-compliant REST API exposed under <code>/api/*</code>:</p>
+
+        <table>
+            <thead>
+                <tr><th style="width:12%;">Method</th><th style="width:38%;">Endpoint Path</th><th style="width:50%;">Operational Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>GET</code></td><td><code>/api/health</code></td><td>Per-component system health status (Database, ML model, Collector)</td></tr>
+                <tr><td><code>GET</code></td><td><code>/api/timeline</code></td><td>Chronological history of traffic, predictions, and concurrency</td></tr>
+                <tr><td><code>GET</code></td><td><code>/api/system/overview</code></td><td>High-level HUD overview metrics and active function status</td></tr>
+                <tr><td><code>GET</code></td><td><code>/api/scaling</code></td><td>Latest scaling decision state, features used, and audit explanations</td></tr>
+                <tr><td><code>POST</code></td><td><code>/api/fleet/{name}/scale</code></td><td>Manual concurrency override actuation for operational emergencies</td></tr>
+                <tr><td><code>POST</code></td><td><code>/api/config</code></td><td>Dynamic runtime guardrail updates (Min, Max, Deadband, Quantile)</td></tr>
+                <tr><td><code>POST</code></td><td><code>/api/demo/invoke</code></td><td>Direct invocation endpoint to test target function cold vs warm latency</td></tr>
+                <tr><td><code>GET</code></td><td><code>/api/evaluation</code></td><td>Retrieves the latest 6-arm A/B benchmark evaluation metrics</td></tr>
+                <tr><td><code>POST</code></td><td><code>/api/evaluation/run</code></td><td>Executes the automated 6-arm benchmarking harness across strategies</td></tr>
+                <tr><td><code>POST</code></td><td><code>/api/models/retrain</code></td><td>Triggers background scikit-learn model retraining on historical metrics</td></tr>
+                <tr><td><code>POST</code></td><td><code>/api/simulation/surge</code></td><td>Injects a synthetic 5× traffic surge to test real-time scaling response</td></tr>
+                <tr><td><code>POST</code></td><td><code>/api/simulation/reset</code></td><td>Resets simulation state back to standard diurnal traffic baseline</td></tr>
+            </tbody>
+        </table>
+
+        <div class="callout callout-green">
+            <div class="callout-title">📖 Interactive OpenAPI Documentation</div>
+            FastAPI provides automatic interactive Swagger UI documentation at <code>http://127.0.0.1:8000/docs</code> and alternative ReDoc documentation at <code>http://127.0.0.1:8000/redoc</code>.
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 19 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 20 — BENCHMARK RESULTS: 6-ARM A/B VALIDATION
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header green">
+        <div class="num">18</div>
+        <h2>Benchmark Results — 6-Arm A/B Validation</h2>
+        <div class="category">Empirical Results</div>
+    </div>
+    <div class="page-body">
+        <p>We executed a rigorous 6-arm A/B benchmark simulating a full 24-hour diurnal workload with burst spikes:</p>
+
+        <table>
+            <thead>
+                <tr><th style="width:25%;">Strategy Arm</th><th style="width:18%;">Cold Start Rate</th><th style="width:18%;">P95 Latency</th><th style="width:20%;">Monthly Cost (Est)</th><th style="width:19%;">Verdict</th></tr>
+            </thead>
+            <tbody>
+                <tr class="row-bad"><td><strong>1. Pure On-Demand</strong></td><td>18.6%</td><td>2,480 ms</td><td>$0.00</td><td>Unacceptable latency</td></tr>
+                <tr><td><strong>2. Keep-Alive Ping (5m)</strong></td><td>14.1%</td><td>2,120 ms</td><td>$0.15</td><td>Fails concurrent bursts</td></tr>
+                <tr><td><strong>3. CloudWatch Reactive</strong></td><td>11.3%</td><td>1,840 ms</td><td>$18.20</td><td>Always 2–3 min too late</td></tr>
+                <tr><td><strong>4. Static (10 Copies)</strong></td><td>0.2%</td><td>42 ms</td><td>$54.75</td><td>Wasteful 3 AM spend</td></tr>
+                <tr><td><strong>5. Warmify (Rule EWMA)</strong></td><td>2.4%</td><td>68 ms</td><td>$12.40</td><td>Good heuristic baseline</td></tr>
+                <tr class="row-highlight"><td><strong>6. Warmify (ML Q90) 🏆</strong></td><td><strong>0.8%</strong></td><td><strong>45 ms</strong></td><td><strong>$13.69</strong></td><td><strong>Best SLA & ROI Balance</strong></td></tr>
+            </tbody>
+        </table>
+
+        <h3>Key Empirical Takeaways</h3>
+        <div class="grid grid-3">
+            <div class="card card-green">
+                <h4>🎯 96% Cold Start Elimination</h4>
+                <p>Reduced cold start rate from <strong>18.6% down to 0.8%</strong>. Tail P95 latency dropped by <strong>98.2%</strong> (from 2,480ms down to 45ms).</p>
+            </div>
+            <div class="card card-purple">
+                <h4>⚡ Parity with Static Over-Provisioning</h4>
+                <p>Achieves equivalent latency performance to running 10 static instances 24/7 (45ms vs 42ms), with zero human management.</p>
+            </div>
+            <div class="card card-amber">
+                <h4>💰 75% Cloud Cost Reduction</h4>
+                <p>Saves <strong>$41.06 per function per month</strong> compared to static provisioning by scaling down during low-traffic overnight hours.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-4">
+            <div class="stat-box"><div class="value green">0.8%</div><div class="label">Cold Rate (Q90)</div></div>
+            <div class="stat-box"><div class="value green">45 ms</div><div class="label">P95 Latency</div></div>
+            <div class="stat-box"><div class="value amber">75%</div><div class="label">Cost Savings</div></div>
+            <div class="stat-box"><div class="value purple">130+ min</div><div class="label">Test Horizon</div></div>
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 20 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 21 — COST ANALYSIS: 75% FINANCIAL SAVINGS
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header amber">
+        <div class="num">19</div>
+        <h2>Cost Analysis — 75% Financial Savings</h2>
+        <div class="category">Financial ROI</div>
+    </div>
+    <div class="page-body">
+        <h3>AWS Lambda Provisioned Concurrency Pricing Model</h3>
+        <p>AWS charges for provisioned concurrency based on GB-seconds allocated:</p>
+
+        <table>
+            <thead>
+                <tr><th style="width:30%;">Pricing Metric</th><th style="width:35%;">Unit Rate (us-east-1)</th><th style="width:35%;">Calculated Hourly / Daily Rate</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Price per GB-second</strong></td><td>$0.0000041667</td><td>$0.015 per GB-hour</td></tr>
+                <tr><td><strong>For a 512 MB Lambda Function</strong></td><td>$0.0000020833 / sec</td><td><strong>$0.0075 / instance-hr</strong> ($0.18 / day)</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Static Over-Provisioning vs. Dynamic Warmify</h3>
+        <div class="grid grid-2">
+            <div class="card card-red">
+                <h4>❌ Static Over-Provisioning (10 Instances 24/7)</h4>
+                <p>Keeps 10 warm microVMs running constantly:</p>
+                <p style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--red); font-weight:700; margin:6px 0;">
+                    10 copies × $0.0075/hr × 730 hrs = $54.75 / mo
+                </p>
+                <ul>
+                    <li>You pay full rate during 3 AM lulls when request traffic is zero</li>
+                    <li>For a fleet of 20 microservices: <strong>$1,095 / month</strong> wasted</li>
+                </ul>
+            </div>
+            <div class="card card-green">
+                <h4>✅ Warmify Dynamic Provisioning (Avg 2.5 Instances)</h4>
+                <p>Scales up during daytime peaks, down during night lulls:</p>
+                <p style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--green-dark); font-weight:700; margin:6px 0;">
+                    2.5 copies × $0.0075/hr × 730 hrs = $13.69 / mo
+                </p>
+                <ul>
+                    <li>Dynamically adapts capacity to match true arrival velocity</li>
+                    <li>Saves <strong>$41.06 / month</strong> per function (75% savings)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="callout callout-green">
+            <div class="callout-title">💰 Annual Fleet Financial Return (20 Functions)</div>
+            Across a modest enterprise microservice fleet of 20 Lambda functions, Warmify saves <strong>$985.44 annually</strong> while simultaneously lifting customer checkout conversion and eliminating latency incidents.
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 21 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 22 — TESTING: 24 AUTOMATED TESTS
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header blue">
+        <div class="num">20</div>
+        <h2>Testing — 24 Automated Tests</h2>
+        <div class="category">Quality Assurance</div>
+    </div>
+    <div class="page-body">
+        <p>Comprehensive 24-test automated suite executed via <code>pytest -v</code> (passes in &lt;4 seconds):</p>
+
+        <div class="grid grid-3">
+            <div class="card card-purple">
+                <h4>🧪 test_controller.py (8 Tests)</h4>
+                <p>Mathematical & scaling logic:</p>
+                <ul>
+                    <li><code>test_littles_law_basic</code></li>
+                    <li><code>test_encode_time_midnight</code></li>
+                    <li><code>test_encode_time_noon</code></li>
+                    <li><code>test_guardrails_min_floor</code></li>
+                    <li><code>test_guardrails_max_cap</code></li>
+                    <li><code>test_guardrails_deadband</code></li>
+                    <li><code>test_guardrails_scale_down</code></li>
+                    <li><code>test_rule_based_fallback</code></li>
+                </ul>
+            </div>
+            <div class="card card-blue">
+                <h4>🔌 test_api.py (8 Tests)</h4>
+                <p>REST API & integration paths:</p>
+                <ul>
+                    <li><code>test_health_endpoint</code></li>
+                    <li><code>test_timeline_structure</code></li>
+                    <li><code>test_scaling_state</code></li>
+                    <li><code>test_evaluation_results</code></li>
+                    <li><code>test_demo_invoke</code></li>
+                    <li><code>test_head_requests</code></li>
+                    <li><code>test_cors_headers</code></li>
+                    <li><code>test_error_handling</code></li>
+                </ul>
+            </div>
+            <div class="card card-green">
+                <h4>💾 test_local_store.py (8 Tests)</h4>
+                <p>Simulation database CRUD:</p>
+                <ul>
+                    <li><code>test_load_initial_data</code></li>
+                    <li><code>test_metric_crud</code></li>
+                    <li><code>test_fleet_management</code></li>
+                    <li><code>test_alert_generation</code></li>
+                    <li><code>test_surge_injection</code></li>
+                    <li><code>test_simulation_reset</code></li>
+                    <li><code>test_config_persistence</code></li>
+                    <li><code>test_model_retrain_flow</code></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="code">
+$ pytest -v
+============================= test session starts ==============================
+platform win32 -- Python 3.12.6, pytest-8.3.3
+tests/test_controller.py::test_littles_law_basic PASSED                   [  4%]
+tests/test_controller.py::test_encode_time_midnight PASSED                [  8%]
+tests/test_controller.py::test_guardrails_min_floor PASSED               [ 12%]
+tests/test_controller.py::test_guardrails_deadband PASSED                [ 25%]
+tests/test_api.py::test_health_endpoint PASSED                            [ 45%]
+tests/test_api.py::test_timeline_structure PASSED                         [ 54%]
+tests/test_local_store.py::test_load_initial_data PASSED                  [ 75%]
+tests/test_local_store.py::test_surge_injection PASSED                    [100%]
+============================== 24 passed in 3.82s ==============================
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 22 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 23 — PROJECT STRUCTURE: REPOSITORY ANATOMY
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header dark">
+        <div class="num">21</div>
+        <h2>Project Structure — Repository Anatomy</h2>
+        <div class="category">Code Organization</div>
+    </div>
+    <div class="page-body">
+        <p>Clean modular directory structure adhering to AWS SAM serverless architectural standards:</p>
+
+<div class="code" style="font-size:9.5px; line-height:1.28;">
+Warmify/
+├── template.yaml                  <span class="cm"># AWS SAM Infrastructure as Code (Lambdas, DynamoDB, EventBridge)</span>
+├── samconfig.toml                 <span class="cm"># SAM deployment settings (region, stack name, S3 bucket)</span>
+├── requirements.txt               <span class="cm"># Python dependencies (boto3, scikit-learn, fastapi, uvicorn)</span>
+├── README.md                      <span class="cm"># Project documentation & quick start overview</span>
+│
+├── docs/
+│   └── DOCUMENTATION.md           <span class="cm"># 476-line mathematical proof & engineering deep-dive</span>
+├── data/
+│   └── warmify_local_data.json    <span class="cm"># Local simulation DB (130+ min diurnal traffic dataset)</span>
+│
+├── lambdas/                       <span class="cm"># 4 Lambda Microservices</span>
+│   ├── demo/app.py                <span class="cm"># Target service: 200K SHA-256 heavy initialization</span>
+│   ├── collector/app.py           <span class="cm"># CloudWatch metrics & log scraper -> DynamoDB</span>
+│   ├── controller/app.py          <span class="cm"># THE BRAIN: Feature engineering, ML Q90, Little's Law, Guardrails</span>
+│   │   └── models/                <span class="cm"># Serialized ML models (model_q50.pkl, model_q90.pkl, model_q95.pkl)</span>
+│   └── api/
+│       ├── app.py                 <span class="cm"># FastAPI backend (18 REST endpoints + static UI server)</span>
+│       └── local_store.py         <span class="cm"># In-memory / JSON simulation storage engine</span>
+│
+├── ui/                            <span class="cm"># React 19 + Vite Frontend Source</span>
+│   ├── package.json & vite.config.js
+│   └── src/
+│       ├── App.jsx & main.jsx
+│       ├── index.css              <span class="cm"># Complete design system & custom tokens</span>
+│       └── components/            <span class="cm"># 13 telemetry components (Globe, Topology, Horizon)</span>
+│
+├── frontend/                      <span class="cm"># Compiled production UI bundle (served by FastAPI)</span>
+├── tests/                         <span class="cm"># 24 automated unit & integration tests</span>
+└── scripts/                       <span class="cm"># Automation utilities</span>
+    ├── run_local.py               <span class="cm"># 1-command verification & local server launcher</span>
+    ├── train_model.py             <span class="cm"># ML Quantile model training pipeline (--local supported)</span>
+    ├── load_generator.py          <span class="cm"># 24-hour diurnal synthetic traffic generator</span>
+    └── evaluation_harness.py      <span class="cm"># 6-arm A/B benchmarking engine</span>
+</div>
+
+        <div class="grid grid-3">
+            <div class="stat-box"><div class="value blue">~2,500</div><div class="label">Lines of Python</div></div>
+            <div class="stat-box"><div class="value green">~3,000</div><div class="label">Lines of React / CSS</div></div>
+            <div class="stat-box"><div class="value purple">100%</div><div class="label">Zero Orphan Code</div></div>
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 23 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 24 — QUICK START: LOCAL SIMULATION & AWS DEPLOY
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header green">
+        <div class="num">22</div>
+        <h2>Quick Start — Local Simulation & AWS Deploy</h2>
+        <div class="category">Operations Guide</div>
+    </div>
+    <div class="page-body">
+        <div class="grid grid-2">
+            <div class="card card-green">
+                <h4>🚀 Mode 1: Run Locally (No AWS Required)</h4>
+                <div class="code" style="font-size:9.5px;">
+<span class="cm"># 1. Clone & activate virtual environment</span>
+git clone https://github.com/Nischal-S143/Warmify.git
+cd Warmify
+python -m venv .venv
+.venv\Scriptsctivate  <span class="cm"># On Windows</span>
+
+<span class="cm"># 2. Install dependencies</span>
+pip install -r requirements.txt
+
+<span class="cm"># 3. Launch local simulation runner</span>
+python scripts/run_local.py
+<span class="cm"># -> Opens http://127.0.0.1:8000</span>
+                </div>
+            </div>
+            <div class="card card-purple">
+                <h4>☁️ Mode 2: Deploy to AWS Cloud (SAM)</h4>
+                <div class="code" style="font-size:9.5px;">
+<span class="cm"># Prerequisites: AWS CLI & SAM CLI configured</span>
+sam build
+
+<span class="cm"># Guided deployment creates DynamoDB table,</span>
+<span class="cm"># Lambdas, EventBridge cron, and API Gateway</span>
+sam deploy --guided
+
+<span class="cm"># Output: API Gateway Endpoint URL</span>
+                </div>
+            </div>
+        </div>
+
+        <h3>Development & Benchmarking Commands</h3>
+        <div class="grid grid-2">
+            <div class="card card-blue">
+                <h4>🧠 Train ML Models Locally</h4>
+                <div class="code" style="font-size:9.5px;">
+python scripts/train_model.py --local
+<span class="cm"># Trains Q50, Q90, Q95 models on local data</span>
+<span class="cm"># Saves to lambdas/controller/models/</span>
+                </div>
+            </div>
+            <div class="card card-amber">
+                <h4>📊 Run 24 Automated Tests</h4>
+                <div class="code" style="font-size:9.5px;">
+pytest -v
+<span class="cm"># Executes full test suite in under 4s</span>
+                </div>
+            </div>
+        </div>
+
+        <h3>Local Simulation vs. AWS Cloud Feature Parity</h3>
+        <table>
+            <thead>
+                <tr><th style="width:25%;">Feature Component</th><th style="width:38%;">Local Simulation Mode</th><th style="width:37%;">AWS Cloud Production Mode</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Data Storage</strong></td><td>JSON file (<code>warmify_local_data.json</code>)</td><td>Amazon DynamoDB Table</td></tr>
+                <tr><td><strong>Telemetry Feed</strong></td><td>Synthetic 130+ min diurnal traffic stream</td><td>Live Amazon CloudWatch Metrics & Logs</td></tr>
+                <tr><td><strong>Concurrency Actuation</strong></td><td>State machine simulation</td><td>AWS Lambda <code>PutProvisionedConcurrencyConfig</code></td></tr>
+                <tr><td><strong>AWS Credentials</strong></td><td><strong>Zero credentials needed</strong></td><td>IAM Role / AWS Profile configured</td></tr>
+            </tbody>
+        </table>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 24 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 25 — CONCLUSION: SUMMARY & KEY TAKEAWAYS
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+    <div class="page-header green" style="background: linear-gradient(135deg, #065f46, #1e40af);">
+        <div class="num">23</div>
+        <h2>Conclusion — Summary & Key Takeaways</h2>
+        <div class="category">Executive Summary</div>
+    </div>
+    <div class="page-body">
+        <div class="grid grid-2">
+            <div class="card card-red">
+                <h4>🔴 The Status Quo Problem</h4>
+                <ul>
+                    <li>AWS Lambda cold starts impose a devastating <strong>2 to 5 second penalty</strong></li>
+                    <li>Reactive auto-scaling triggers <strong>2–3 minutes too late</strong> due to CloudWatch metric publishing delay</li>
+                    <li>Static over-provisioning works but wastes <strong>$54.75 / mo per function</strong> during overnight lulls</li>
+                </ul>
+            </div>
+            <div class="card card-green">
+                <h4>🟢 The Warmify Solution</h4>
+                <ul>
+                    <li><strong>Proactive Forecast:</strong> 10-minute lookahead predicts surges before they materialize</li>
+                    <li><strong>Rigorous Sizing:</strong> Little's Queuing Law computes mathematically exact container count</li>
+                    <li><strong>Production Safety:</strong> 4 deterministic guardrails eliminate runaway billing and flapping</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>Synthesis of Methodologies</h3>
+        <div class="grid grid-3">
+            <div class="card card-purple">
+                <h4>🔬 Machine Learning</h4>
+                <p>Pinball Quantile Loss (α = 0.90) prioritizes avoiding under-provisioning, natively modeling the asymmetric cost of latency.</p>
+            </div>
+            <div class="card card-blue">
+                <h4>📐 Queuing Theory</h4>
+                <p>John Little's fundamental formula (L = λ × W) translates traffic request rate directly into concurrent serverless container units.</p>
+            </div>
+            <div class="card card-amber">
+                <h4>🛡️ Systems Engineering</h4>
+                <p>Hysteresis dead-bands and asymmetric scaling dampeners prevent cloud thrashing while strictly maintaining latency SLAs.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-4">
+            <div class="stat-box"><div class="value green">96%</div><div class="label">Cold Starts Cut</div></div>
+            <div class="stat-box"><div class="value green">45 ms</div><div class="label">P95 Latency</div></div>
+            <div class="stat-box"><div class="value amber">75%</div><div class="label">Cost Saved</div></div>
+            <div class="stat-box"><div class="value purple">24 / 24</div><div class="label">Tests Passing</div></div>
+        </div>
+
+        <div class="callout callout-green" style="text-align:center; padding:10px 14px;">
+            <div class="callout-title" style="justify-content:center; font-size:12px;">⚡ Warmify eliminates cold starts before they happen</div>
+            Turning serverless auto-scaling from a reactive lagging afterthought into an autonomous, proactive, cost-efficient science.
+        </div>
+
+        <div class="page-footer">
+            <span>Warmify • Project Presentation</span>
+            <span>Slide 25 of 24</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 26 — BACK COVER: Q&A & DISCUSSION
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page cover" style="padding: 36px 36px;">
+    <div>
+        <div class="header-badge">💬 PRESENTATION & EVALUATION</div>
+        <h1 style="font-size:36px; margin: 12px 0 6px;">Thank You!</h1>
+        <p class="subtitle" style="font-size:14px; margin-bottom:16px;">
+            We are now ready for technical questions, live demonstration, and code inspection.
+        </p>
+
+        <div class="card" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color:#f1f5f9; padding:12px 16px; margin-bottom:16px;">
+            <h4 style="color:#38bdf8; margin-bottom:6px;">💡 Suggested Discussion Topics for Evaluation</h4>
+            <div class="grid grid-2" style="margin:0;">
+                <ul style="padding-left:14px; font-size:10.5px; color:#cbd5e1;">
+                    <li>Trade-offs between Quantile loss α=0.90 vs α=0.95 in critical systems</li>
+                    <li>How Little's Law handles variable Lambda duration distributions</li>
+                </ul>
+                <ul style="padding-left:14px; font-size:10.5px; color:#cbd5e1;">
+                    <li>Asymmetric scale-down vs traditional exponential smoothing</li>
+                    <li>Migrating from single-function to multi-tenant organization fleet</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h4 style="color:#94a3b8; font-size:11px; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">Live Demonstration & Resources</h4>
+        <div class="badges">
+            <span class="badge">📂 GitHub: github.com/Nischal-S143/Warmify</span>
+            <span class="badge">💻 Local Demo: python scripts/run_local.py</span>
+            <span class="badge">🧪 Test Suite: pytest -v</span>
+            <span class="badge">📄 License: MIT Open Source</span>
+        </div>
+    </div>
+
+    <div class="cover-footer" style="margin-top:16px;">
+        <div>Warmify • Project Presentation Deck • 24 Comprehensive Slides</div>
+        <div>Nischal & Team • October 2026</div>
+    </div>
+</div>
+
+</div> <!-- /container -->
+
+</body>
+</html>

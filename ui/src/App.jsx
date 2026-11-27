@@ -11,8 +11,9 @@ import BenchmarkView from './components/BenchmarkView';
 import CloudWatchTelemetryView from './components/CloudWatchTelemetryView';
 import ConfigModal from './components/ConfigModal';
 import HealthModal from './components/HealthModal';
-
+import LandingPage from './components/LandingPage';
 export default function App() {
+  const [authUser, setAuthUser] = useState(() => localStorage.getItem('warmify_user'));
   const [activeTab, setActiveTab] = useState('overview');
   const [controllerMode, setControllerMode] = useState('q90');
   const [viewMode, setViewMode] = useState('pipeline');
@@ -206,6 +207,10 @@ export default function App() {
   const selectedFunction = functions.find((f) => f.id === selectedFuncId) || functions[0];
   const latestMetric = timelineData?.traffic_history?.slice(-1)[0] || null;
 
+  if (!authUser) {
+    return <LandingPage onAuth={(u) => setAuthUser(u)} />;
+  }
+
   return (
     <div className="screen-wrapper">
       <div className="screen-vignette" />
@@ -218,6 +223,7 @@ export default function App() {
         onOpenBenchmarks={() => setIsBenchmarkOpen(true)}
         onOpenConfig={() => setIsConfigOpen(true)}
         onOpenHealth={() => setIsHealthOpen(true)}
+        onLogout={() => { localStorage.removeItem('warmify_user'); setAuthUser(null); }}
       />
 
       {/* Dynamic Tab Body */}

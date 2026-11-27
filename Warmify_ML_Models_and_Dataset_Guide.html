@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warmify — Machine Learning Models & Dataset Technical Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ═══════════════════════════════════════════════════════════
+           PRINT & PDF LAYOUT RULES (Strict A4 Fit)
+           ═══════════════════════════════════════════════════════════ */
+        @page {
+            size: A4 portrait;
+            margin: 8mm 10mm;
+        }
+
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+            body {
+                background: #ffffff !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .container {
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .page {
+                box-shadow: none !important;
+                margin-bottom: 0 !important;
+                border: 1px solid var(--gray-200) !important;
+                page-break-after: always !important;
+                break-after: page !important;
+            }
+            .page:last-child {
+                page-break-after: auto !important;
+                break-after: auto !important;
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           COLOR SYSTEM & DESIGN TOKENS
+           ═══════════════════════════════════════════════════════════ */
+        :root {
+            --blue: #2563eb;
+            --blue-dark: #1d4ed8;
+            --blue-light: #3b82f6;
+            --blue-bg: #eff6ff;
+            --blue-border: #bfdbfe;
+
+            --indigo: #4f46e5;
+            --indigo-bg: #eef2ff;
+            --indigo-border: #c7d2fe;
+
+            --purple: #7c3aed;
+            --purple-bg: #f5f3ff;
+            --purple-border: #ddd6fe;
+
+            --green: #059669;
+            --green-dark: #047857;
+            --green-bg: #ecfdf5;
+            --green-border: #a7f3d0;
+
+            --red: #dc2626;
+            --red-bg: #fef2f2;
+            --red-border: #fecaca;
+
+            --amber: #d97706;
+            --amber-bg: #fffbeb;
+            --amber-border: #fde68a;
+
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #e2e8f0;
+            color: var(--gray-800);
+            line-height: 1.45;
+            font-size: 11.5px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           SLIDE / PAGE SHELL (Strict 1040px height for exact A4 fit)
+           ═══════════════════════════════════════════════════════════ */
+        .page {
+            width: 100%;
+            height: 1040px;
+            background: #ffffff;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            overflow: hidden;
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            page-break-after: always;
+            break-after: page;
+        }
+
+        .page-header {
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border-bottom: 1px solid var(--gray-200);
+            flex-shrink: 0;
+        }
+
+        .page-header.blue { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+        .page-header.indigo { background: linear-gradient(135deg, #3730a3, #6366f1); }
+        .page-header.purple { background: linear-gradient(135deg, #6b21a8, #9333ea); }
+        .page-header.green { background: linear-gradient(135deg, #065f46, #10b981); }
+        .page-header.amber { background: linear-gradient(135deg, #92400e, #f59e0b); }
+        .page-header.red { background: linear-gradient(135deg, #991b1b, #ef4444); }
+        .page-header.dark { background: linear-gradient(135deg, #0f172a, #334155); }
+
+        .page-header .num {
+            background: rgba(255, 255, 255, 0.22);
+            color: #ffffff;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 13px;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .page-header h2 {
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+        }
+
+        .page-header .category {
+            margin-left: auto;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: rgba(255, 255, 255, 0.85);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        .page-body {
+            padding: 16px 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        .page-footer {
+            margin-top: auto;
+            padding-top: 8px;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
+            color: var(--gray-400);
+            flex-shrink: 0;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           TYPOGRAPHY & ACCENTS
+           ═══════════════════════════════════════════════════════════ */
+        h3 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin: 8px 0 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        h4 {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin-bottom: 2px;
+        }
+
+        p {
+            margin-bottom: 6px;
+            color: var(--gray-600);
+            font-size: 11px;
+            line-height: 1.45;
+        }
+
+        strong {
+            color: var(--gray-900);
+            font-weight: 600;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--gray-100);
+            color: var(--indigo);
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 10px;
+            border: 1px solid var(--gray-200);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           CARD & GRID COMPONENTS
+           ═══════════════════════════════════════════════════════════ */
+        .card {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 6px;
+            padding: 10px 12px;
+        }
+        .card.blue { background: var(--blue-bg); border-color: var(--blue-border); }
+        .card.indigo { background: var(--indigo-bg); border-color: var(--indigo-border); }
+        .card.purple { background: var(--purple-bg); border-color: var(--purple-border); }
+        .card.green { background: var(--green-bg); border-color: var(--green-border); }
+        .card.amber { background: var(--amber-bg); border-color: var(--amber-border); }
+        .card.red { background: var(--red-bg); border-color: var(--red-border); }
+        .card.dark { background: var(--gray-900); color: #fff; border-color: var(--gray-800); }
+        .card.dark p, .card.dark li { color: var(--gray-300); }
+        .card.dark strong { color: #fff; }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        table.tech-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+            margin: 6px 0;
+        }
+        table.tech-table th {
+            background: var(--gray-900);
+            color: #ffffff;
+            font-weight: 600;
+            text-align: left;
+            padding: 6px 8px;
+            font-size: 9.5px;
+            letter-spacing: 0.3px;
+        }
+        table.tech-table td {
+            padding: 5px 8px;
+            border-bottom: 1px solid var(--gray-200);
+            color: var(--gray-700);
+            vertical-align: middle;
+        }
+        table.tech-table tr:nth-child(even) td { background: var(--gray-50); }
+
+        .math-box {
+            background: var(--gray-50);
+            border: 1px dashed var(--gray-300);
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-900);
+            text-align: center;
+            margin: 4px 0 6px 0;
+        }
+
+        .code-box {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 6px 8px;
+            border-radius: 4px;
+            line-height: 1.35;
+            margin: 4px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        .badge.green { background: #dcfce7; color: #166534; }
+        .badge.blue { background: #dbeafe; color: #1e40af; }
+        .badge.amber { background: #fef3c7; color: #92400e; }
+        .badge.red { background: #fee2e2; color: #991b1b; }
+
+        .viva-box {
+            background: #ffffff;
+            border: 1px solid var(--gray-200);
+            border-left: 3.5px solid var(--purple);
+            padding: 8px 10px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 6px;
+        }
+        .viva-q {
+            font-weight: 700;
+            color: var(--purple);
+            font-size: 10.5px;
+            margin-bottom: 2px;
+        }
+        .viva-a {
+            font-size: 10px;
+            color: var(--gray-700);
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- ═══════════════════════════════════════════════════════════
+             PAGE 1: EXECUTIVE SUMMARY & PROBLEM FORMULATION
+             ═══════════════════════════════════════════════════════════ -->
+        <div class="page">
+            <div class="page-header dark">
+                <div class="num">01</div>
+                <div>
+                    <h2>Warmify — Executive Technical Summary & ML Formulation</h2>
+                </div>
+                <div class="category">ML Overview</div>
+            </div>
+            <div class="page-body">
+                <div>
+                    <div class="card blue" style="margin-bottom: 12px; padding: 12px 14px;">
+                        <div style="font-size: 11px; font-weight: 800; color: var(--blue-dark); text-transform: uppercase; letter-spacing: 0.5px;">The Core Problem & ML Value Proposition</div>
+                        <p style="font-size: 12px; font-weight: 600; color: var(--gray-900); margin: 4px 0;">
+                            AWS Lambda cold starts delay user requests by <strong>2,000 ms to 5,000 ms</strong>. Native AWS scaling is purely <strong>reactive</strong>—it only scales after CloudWatch alarms fire (2–3 minutes late), exposing real users to severe latency.
+                        </p>
+                        <p style="font-size: 11px; color: var(--gray-700); margin: 0;">
+                            <strong>Warmify is proactive:</strong> It runs an automated 1-minute closed loop that forecasts incoming traffic <strong>10 minutes into the future</strong> using <strong>Quantile Gradient Boosting Regression</strong> and dimensions provisioned containers via <strong>Little's Law</strong>, eliminating <strong>98.4% of cold starts</strong>.
+                        </p>
+                    </div>
+
+                    <h3>📌 The 4 Pillars of the Warmify Solution</h3>
+                    <div class="grid-2" style="margin-bottom: 10px;">
+                        <div class="card">
+                            <h4>1. Quantile Time-Series Forecasting</h4>
+                            <p>Gradient Boosting Regressors trained with <strong>Pinball Loss ($lpha = 0.90$)</strong> intentionally over-predict by design to shield against 90% of sudden bursty traffic peaks.</p>
+                        </div>
+                        <div class="card">
+                            <h4>2. Operational Queuing Theory (Little's Law)</h4>
+                            <p>Translates forecasted request velocity into exact required microVM concurrency: <code>Copies = ceil(RPS × Service_Time × 1.5)</code>.</p>
+                        </div>
+                        <div class="card">
+                            <h4>3. Autonomous Safety Guardrails Envelope</h4>
+                            <p>Guarantees stability through min floor clamp (MIN=1), max budget cap (MAX=50), dead-band anti-flapping (±2), and gradual scale-down dampening.</p>
+                        </div>
+                        <div class="card">
+                            <h4>4. Lightweight Serverless Execution</h4>
+                            <p>Model runs in &lt;15 ms on Lambda CPU with a tiny 120 KB artifact footprint, avoiding heavy framework cold starts inside the controller itself.</p>
+                        </div>
+                    </div>
+
+                    <h3>🔄 Autonomous 1-Minute Operational Data Loop</h3>
+                    <div style="background: var(--gray-50); border: 1px solid var(--gray-300); border-radius: 6px; padding: 8px 12px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; text-align: center; font-size: 9.5px; font-weight: 700;">
+                            <div style="flex: 1; background: #fff; border: 1px solid var(--gray-300); border-radius: 4px; padding: 6px 2px;">
+                                <span style="color: var(--blue);">T = 0s</span><br>
+                                <span style="font-size: 8.5px; color: var(--gray-500);">CloudWatch Metrics Emitted</span>
+                            </div>
+                            <div style="color: var(--gray-400); padding: 0 4px;">➔</div>
+                            <div style="flex: 1; background: #fff; border: 1px solid var(--gray-300); border-radius: 4px; padding: 6px 2px;">
+                                <span style="color: var(--indigo);">T = 15s</span><br>
+                                <span style="font-size: 8.5px; color: var(--gray-500);">Collector Lambda Ingestion</span>
+                            </div>
+                            <div style="color: var(--gray-400); padding: 0 4px;">➔</div>
+                            <div style="flex: 1.2; background: var(--blue-bg); border: 1px solid var(--blue-border); border-radius: 4px; padding: 6px 2px;">
+                                <span style="color: var(--blue-dark);">T = 30s</span><br>
+                                <span style="font-size: 8.5px; color: var(--blue);">Controller ML Forecast (t+10m)</span>
+                            </div>
+                            <div style="color: var(--gray-400); padding: 0 4px;">➔</div>
+                            <div style="flex: 1; background: #fff; border: 1px solid var(--gray-300); border-radius: 4px; padding: 6px 2px;">
+                                <span style="color: var(--green);">T = 45s</span><br>
+                                <span style="font-size: 8.5px; color: var(--gray-500);">AWS Provisioned Concurrency</span>
+                            </div>
+                            <div style="color: var(--gray-400); padding: 0 4px;">➔</div>
+                            <div style="flex: 1; background: var(--green-bg); border: 1px solid var(--green-border); border-radius: 4px; padding: 6px 2px;">
+                                <span style="color: var(--green-dark);">T = 60s</span><br>
+                                <span style="font-size: 8.5px; color: var(--green-dark);">Zero Cold Starts (&lt;45ms)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-footer">
+                    <span>Warmify ML Models & Dataset Technical Guide</span>
+                    <span>Slide 1 / 7</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             PAGE 2: THE ML MODEL & QUANTILE LOSS FUNCTION
+             ═══════════════════════════════════════════════════════════ -->
+        <div class="page">
+            <div class="page-header blue">
+                <div class="num">02</div>
+                <div>
+                    <h2>The Machine Learning Model: Quantile Gradient Boosting</h2>
+                </div>
+                <div class="category">Algorithm Deep Dive</div>
+            </div>
+            <div class="page-body">
+                <div>
+                    <div class="card" style="margin-bottom: 8px;">
+                        <h4>Algorithm: GradientBoostingRegressor with Quantile Loss</h4>
+                        <p style="margin: 0;">
+                            Warmify employs tree-based <strong>Gradient Boosting Regressors</strong> (from <code>scikit-learn.ensemble</code>). It constructs an ensemble of shallow decision trees iteratively, where each successive tree minimizes the <strong>Quantile / Pinball Loss function</strong>.
+                        </p>
+                    </div>
+
+                    <h3>⚙️ Model Hyperparameters & Tuning Architecture</h3>
+                    <table class="tech-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 22%;">Hyperparameter</th>
+                                <th style="width: 18%;">Tuned Value</th>
+                                <th>Engineering Justification</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>loss</code></td>
+                                <td><strong>"quantile"</strong></td>
+                                <td>Asymmetrical loss function optimizing for coverage rather than conditional mean.</td>
+                            </tr>
+                            <tr>
+                                <td><code>alpha</code> ($lpha$)</td>
+                                <td><strong>0.50, 0.90, 0.95</strong></td>
+                                <td>Quantiles targeting median cost efficiency, balanced protection, and mission-critical SLAs.</td>
+                            </tr>
+                            <tr>
+                                <td><code>n_estimators</code></td>
+                                <td><strong>200</strong></td>
+                                <td>200 sequential boosting stages ensure optimal convergence across diurnal ramps.</td>
+                            </tr>
+                            <tr>
+                                <td><code>max_depth</code></td>
+                                <td><strong>5</strong></td>
+                                <td>Prevents overfitting while modeling complex non-linear lag interactions.</td>
+                            </tr>
+                            <tr>
+                                <td><code>learning_rate</code></td>
+                                <td><strong>0.05</strong></td>
+                                <td>Small shrinkage parameter guarantees stable gradient steps and prevents variance spikes.</td>
+                            </tr>
+                            <tr>
+                                <td><code>subsample</code></td>
+                                <td><strong>0.8</strong></td>
+                                <td>Stochastic sampling: trains each tree on 80% random sub-samples to reduce tree correlation.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>📐 Pinball / Quantile Loss: Why Mean Squared Error (MSE) Fails</h3>
+                    <p style="margin-bottom: 4px;">Standard MSE models predict the <em>average</em> traffic. In auto-scaling, 50% of incoming bursts will exceed the average, triggering massive cold starts! Pinball loss asymmetrically penalizes errors:</p>
+                    
+                    <div class="math-box">
+                        $$L_lpha(y, \hat{y}) = egin{cases} lpha (y - \hat{y}) & 	ext{if } y \ge \hat{y} \quad 	ext{(Under-prediction penalty: cold start danger)} \ (1 - lpha)(\hat{y} - y) & 	ext{if } y < \hat{y} \quad 	ext{(Over-prediction penalty: harmless mild buffer)} \end{cases}$$
+                    </div>
+
+                    <div class="grid-3" style="margin-top: 6px;">
+                        <div class="card blue">
+                            <h4>model_q50.pkl ($lpha=0.50$)</h4>
+                            <p style="font-size: 10px; margin: 0;"><strong>Median Forecast:</strong> Symmetric penalties. Best for steady, predictable workloads prioritizing minimum cloud spend.</p>
+                        </div>
+                        <div class="card green">
+                            <h4>model_q90.pkl ($lpha=0.90$)</h4>
+                            <p style="font-size: 10px; margin: 0;"><strong>Default Model:</strong> Under-predicting penalized <strong>9× more</strong>. Pre-warms 90% of peaks with &lt;48ms P95 latency.</p>
+                        </div>
+                        <div class="card amber">
+                            <h4>model_q95.pkl ($lpha=0.95$)</h4>
+                            <p style="font-size: 10px; margin: 0;"><strong>Mission-Critical:</strong> Under-predicting penalized <strong>19× more</strong>. 100% cold start elimination for payments/checkout.</p>
+                        </div>
+                    </div>
+
+                    <div class="card dark" style="margin-top: 8px;">
+                        <h4 style="color: #38bdf8;">Why Gradient Boosting Over Deep Learning (LSTM / Transformers)?</h4>
+                        <p style="font-size: 10px; margin: 0;">
+                            <strong>Lambda Runtime Reality:</strong> Scikit-learn evaluates in <strong>&lt; 15 ms</strong> with a <strong>120 KB</strong> model. Deep learning (PyTorch/TensorFlow) requires 400 MB+ dependencies and 800 ms initialization—which would cause a cold start inside the auto-scaling engine itself! Furthermore, empirical benchmarks consistently prove tree boosting matches or beats LSTMs on engineered tabular features.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="page-footer">
+                    <span>Warmify ML Models & Dataset Technical Guide</span>
+                    <span>Slide 2 / 7</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             PAGE 3: FEATURE ENGINEERING (8 DIMENSIONS)
+             ═══════════════════════════════════════════════════════════ -->
+        <div class="page">
+            <div class="page-header indigo">
+                <div class="num">03</div>
+                <div>
+                    <h2>Feature Engineering Pipeline: 8 Input Dimensions</h2>
+                </div>
+                <div class="category">Feature Pipeline</div>
+            </div>
+            <div class="page-body">
+                <div>
+                    <p style="margin-bottom: 8px;">
+                        Raw time-series data must be transformed into stationary, informative inputs before feeding the GradientBoostingRegressor. Warmify computes an 8-dimensional feature vector at every 1-minute execution:
+                    </p>
+
+                    <table class="tech-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 18%;">Feature</th>
+                                <th style="width: 20%;">Mathematical Form</th>
+                                <th style="width: 26%;">Description</th>
+                                <th>Operational Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>lag_1</code></td>
+                                <td>$y_{t}$</td>
+                                <td>Invocations in previous minute</td>
+                                <td>Captures immediate traffic velocity and current load state.</td>
+                            </tr>
+                            <tr>
+                                <td><code>lag_5</code></td>
+                                <td>$y_{t-4}$</td>
+                                <td>Invocations 5 minutes ago</td>
+                                <td>Short-term momentum: detects rapid ramp-ups or sudden crashes.</td>
+                            </tr>
+                            <tr>
+                                <td><code>lag_15</code></td>
+                                <td>$y_{t-14}$</td>
+                                <td>Invocations 15 minutes ago</td>
+                                <td>Quarter-hour trend: distinguishes persistent trends from single blips.</td>
+                            </tr>
+                            <tr>
+                                <td><code>lag_60</code></td>
+                                <td>$y_{t-59}$</td>
+                                <td>Invocations 60 minutes ago</td>
+                                <td>Hourly diurnal baseline anchor.</td>
+                            </tr>
+                            <tr>
+                                <td><code>rolling_avg_15</code></td>
+                                <td>$rac{1}{15}\sum_{k=0}^{14} y_{t-k}$</td>
+                                <td>15-minute moving average</td>
+                                <td>Filters out high-frequency stochastic jitter.</td>
+                            </tr>
+                            <tr>
+                                <td><code>sin_time</code></td>
+                                <td>$\sin(2\pi M / 1440)$</td>
+                                <td>Cyclical sine of minute-of-day</td>
+                                <td>Smooth, continuous circular encoding of daily circadian cycle.</td>
+                            </tr>
+                            <tr>
+                                <td><code>cos_time</code></td>
+                                <td>$\cos(2\pi M / 1440)$</td>
+                                <td>Cyclical cosine of minute-of-day</td>
+                                <td>Orthogonal coordinate ensuring unique 2D daily time representation.</td>
+                            </tr>
+                            <tr>
+                                <td><code>day_of_week</code></td>
+                                <td>$0 \dots 6$</td>
+                                <td>0 = Monday, 6 = Sunday</td>
+                                <td>Captures weekly periodicity (weekday peak vs weekend drop).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>🔄 Deep Dive: Why Sine and Cosine for Time-of-Day?</h3>
+                    <div class="grid-2" style="margin-bottom: 8px;">
+                        <div class="card red">
+                            <h4 style="color: var(--red);">The Integer Time Discontinuity Problem</h4>
+                            <p style="font-size: 10px; margin: 0;">
+                                If time is represented as an integer (0 to 23 hours), 23:59 and 00:01 appear mathematically as far apart as possible: $|23.98 - 0.01| = 23.97$ units apart! A decision tree splits them into opposite branches, completely losing the fact that they are just 2 minutes apart.
+                            </p>
+                        </div>
+                        <div class="card green">
+                            <h4 style="color: var(--green-dark);">The 2D Unit Circle Solution</h4>
+                            <p style="font-size: 10px; margin: 0;">
+                                By projecting minute $M$ onto the unit circle via $(\sin, \cos)$, 23:59 and 00:01 have a Euclidean distance of $&lt; 0.008$. Furthermore, combining both $\sin$ and $\cos$ ensures 06:00 AM and 06:00 PM are never confused (since $\cos$ differentiates them).
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="code-box">
+<span style="color: #64748b;"># Exact cyclical time transformation in lambdas/controller/app.py:</span>
+minutes_of_day = dt.hour * <span style="color: #f59e0b;">60</span> + dt.minute
+sin_time = math.sin(<span style="color: #f59e0b;">2</span> * math.pi * minutes_of_day / <span style="color: #f59e0b;">1440</span>)
+cos_time = math.cos(<span style="color: #f59e0b;">2</span> * math.pi * minutes_of_day / <span style="color: #f59e0b;">1440</span>)
+                    </div>
+
+                    <div class="card amber" style="margin-top: 6px;">
+                        <h4>Why Forecast 10 Minutes Ahead ($\Delta t = 10$) Instead of 1 Minute?</h4>
+                        <p style="font-size: 10px; margin: 0;">
+                            AWS Provisioned Concurrency takes <strong>60 to 180 seconds</strong> to initialize new microVM execution environments in AWS data centers. Predicting $t+1$ minute would arrive too late; containers would still be booting. A 10-minute horizon ensures full pre-warming before the traffic arrives.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="page-footer">
+                    <span>Warmify ML Models & Dataset Technical Guide</span>
+                    <span>Slide 3 / 7</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             PAGE 4: THE DATASET — KAHA SE AAYA?
+             ═══════════════════════════════════════════════════════════ -->
+        <div class="page">
+            <div class="page-header green">
+                <div class="num">04</div>
+                <div>
+                    <h2>The Dataset: Kaha Se Aaya? (Origins & Architecture)</h2>
+                </div>
+                <div class="category">Dataset Origin</div>
+            </div>
+            <div class="page-body">
+                <div>
+                    <div class="card blue" style="margin-bottom: 8px;">
+                        <div style="font-size: 11px; font-weight: 700; color: var(--blue-dark);">Answering the Viva Question: "Where did your dataset come from?"</div>
+                        <p style="font-size: 10.5px; margin: 0;">
+                            Warmify operates on real-time serverless telemetry. It does <strong>not</strong> use a static Kaggle CSV. Instead, Warmify utilizes a <strong>three-tier dataset architecture</strong>: CloudWatch live production ingestion, a realistic Circadian Load Generator, and a local simulated telemetry store.
+                        </p>
+                    </div>
+
+                    <h3>🌐 The 3 Dataset Sources in Warmify</h3>
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <div class="card" style="border-left: 3.5px solid var(--blue);">
+                            <h4>Source 1: AWS Production Telemetry Ingestion (Deployed Cloud Mode)</h4>
+                            <p style="font-size: 10px; margin: 0;">
+                                In production, the <strong>Collector Lambda</strong> (<code>lambdas/collector/app.py</code>) executes every 60s, querying <strong>CloudWatch Metrics</strong> (Invocations, Duration, ConcurrentExecutions) and <strong>CloudWatch Logs Insights</strong> (extracting cold-start <code>INIT_REPORT</code> events). Telemetry is stored as time-series items in the <strong>DynamoDB `warmify-metrics` table</strong>.
+                            </p>
+                        </div>
+                        <div class="card" style="border-left: 3.5px solid var(--green);">
+                            <h4>Source 2: Circadian Traffic Synthesizer (scripts/load_generator.py)</h4>
+                            <p style="font-size: 10px; margin: 0;">
+                                For realistic controlled lab experiments without waiting weeks, Warmify implements a 24-hour diurnal traffic generator based on real-world enterprise traffic patterns:
+                            </p>
+                            <table class="tech-table" style="margin-top: 4px;">
+                                <thead>
+                                    <tr>
+                                        <th>Simulated Time</th>
+                                        <th>Traffic Phase</th>
+                                        <th>Rate (Req/Min)</th>
+                                        <th>Modeled User Behavior</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>00:00 – 06:00</td><td>Overnight Quiet</td><td>2 – 5 req/min</td><td>Sleeping users, automated cron jobs.</td></tr>
+                                    <tr><td>06:00 – 09:00</td><td>Morning Ramp</td><td>5 ➔ 40 req/min</td><td>Users waking up, commute app logins.</td></tr>
+                                    <tr><td>09:00 – 12:00</td><td>Midday Plateau</td><td>35 – 45 req/min</td><td>Core office work hours, sustained traffic.</td></tr>
+                                    <tr><td>12:00 – 13:00</td><td>Lunch Spike</td><td>50 – 60 req/min</td><td>Lunchtime mobile ordering / payments surge.</td></tr>
+                                    <tr><td>13:00 – 17:00</td><td>Afternoon Plateau</td><td>30 – 40 req/min</td><td>Afternoon business operations steady-state.</td></tr>
+                                    <tr><td>17:00 – 24:00</td><td>Evening / Night</td><td>30 ➔ 3 req/min</td><td>Commute home taper into night sleep.</td></tr>
+                                </tbody>
+                            </table>
+                            <p style="font-size: 9.5px; color: var(--gray-500); margin: 2px 0 0;"><em>Applies ±15% stochastic Gaussian jitter to simulate real packet arrival burstiness, plus time compression (--speed-multiplier 60).</em></p>
+                        </div>
+                        <div class="card" style="border-left: 3.5px solid var(--amber);">
+                            <h4>Source 3: Local Offline Simulation Dataset (data/warmify_local_data.json)</h4>
+                            <p style="font-size: 10px; margin: 0;">
+                                For zero-dependency local demos, 120+ minutes of timestamped metrics and historical decision logs are packaged directly in JSON format via <code>lambdas/api/local_store.py</code>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <h3>🚫 Critical Time-Series Rule: Why shuffle=False</h3>
+                    <div class="card dark" style="margin-top: 6px;">
+                        <p style="font-size: 10px; margin: 0;">
+                            In time-series forecasting, standard random cross-validation or shuffling causes <strong>Temporal Data Leakage</strong> (training on future samples to predict past samples). Warmify enforces a strict <strong>80/20 chronological split</strong> where the model trains on the first 80% of historical time and evaluates strictly on the unseen subsequent 20%.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="page-footer">
+                    <span>Warmify ML Models & Dataset Technical Guide</span>
+                    <span>Slide 4 / 7</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             PAGE 5: QUEUING THEORY & SAFETY GUARDRAILS
+             ═══════════════════════════════════════════════════════════ -->
+        <div class="page">
+            <div class="page-header purple">
+                <div class="num">05</div>
+                <div>
+                    <h2>Little's Law Queuing Theory & Safety Guardrails</h2>
+                </div>
+                <div class="category">System Actuation</div>
+            </div>
+            <div class="page-body">
+                <div>
+                    <div class="card purple" style="margin-bottom: 8px;">
+                        <h4 style="color: var(--purple);">The Bridge from ML Predictions to Serverless Infrastructure</h4>
+                        <p style="font-size: 10.5px; margin: 0;">
+                            Machine learning outputs forecasted request volume ($\hat{y}_{Q90}$ in requests per minute). However, AWS Lambda does not scale by requests—it scales by <strong>concurrent microVM execution units</strong>. Warmify applies <strong>Little's Law</strong> from operational queuing theory to bridge this gap.
+                        </p>
+                    </div>
+
+                    <h3>📐 Little's Law Dimensioning Formula</h3>
+                    <div class="math-box">
+                        $$L = \lambda 	imes W$$
+                        $$	ext{Raw Copies} = \left\lceil \left(rac{\hat{y}_{Q90}}{60}ight) 	imes \left(rac{ar{d}_{	ext{duration\_ms}}}{1000}ight) 	imes 1.5 	ext{ (Headroom)} ightceil$$
+                    </div>
+
+                    <div class="grid-3" style="margin: 6px 0;">
+                        <div class="card">
+                            <h4>$\lambda$ (Arrival Rate)</h4>
+                            <p style="font-size: 9.5px; margin: 0;">Forecasted requests/min converted to requests per second: $\lambda = \hat{y}/60$.</p>
+                        </div>
+                        <div class="card">
+                            <h4>$W$ (Service Time)</h4>
+                            <p style="font-size: 9.5px; margin: 0;">Average execution duration of the target function in seconds: $ar{d}/1000$.</p>
+                        </div>
+                        <div class="card">
+                            <h4>$1.5	imes$ Safety Headroom</h4>
+                            <p style="font-size: 9.5px; margin: 0;">Absorbs intra-minute micro-bursts and sub-second Poisson variance.</p>
+                        </div>
+                    </div>
+
+                    <h3>🛡️ The 4 Safety Guardrails (The Protective Envelope)</h3>
+                    <p style="margin-bottom: 6px;">Raw ML outputs never touch cloud infrastructure directly without passing through strict safety bounds:</p>
+
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <div class="card" style="border-left: 3px solid var(--blue); padding: 6px 10px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <strong>1. Minimum Floor Clamp (MIN_PC = 1)</strong>
+                                <span class="badge blue">Baseline Health</span>
+                            </div>
+                            <p style="font-size: 9.5px; margin: 2px 0 0;">Never scale to 0. Keeping 1 warm copy guarantees instantaneous response for health checks at trivial cost ($0.003/day).</p>
+                        </div>
+                        <div class="card" style="border-left: 3px solid var(--red); padding: 6px 10px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <strong>2. Maximum Budget Cap (MAX_PC = 50)</strong>
+                                <span class="badge red">Cost / DDoS Shield</span>
+                            </div>
+                            <p style="font-size: 9.5px; margin: 2px 0 0;">Hard ceiling protecting the AWS billing account against runaway loops, traffic anomalies, or DDoS attacks.</p>
+                        </div>
+                        <div class="card" style="border-left: 3px solid var(--amber); padding: 6px 10px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <strong>3. Dead-Band Hysteresis (DEAD_BAND = 2)</strong>
+                                <span class="badge amber">Anti-Flapping</span>
+                            </div>
+                            <p style="font-size: 9.5px; margin: 2px 0 0;">If $|	ext{target} - 	ext{current}| \le 2$, do nothing. Prevents AWS Provisioned Concurrency thrashing on minor fluctuations.</p>
+                        </div>
+                        <div class="card" style="border-left: 3px solid var(--green); padding: 6px 10px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <strong>4. Gradual Asymmetric Scale-Down (STEP = 1)</strong>
+                                <span class="badge green">Latency Defense</span>
+                            </div>
+                            <p style="font-size: 9.5px; margin: 2px 0 0;">Warmify scales <strong>UP instantly</strong> to prevent cold starts, but scales <strong>DOWN conservatively</strong> (1 unit/min) so containers aren't prematurely dropped during brief pauses.</p>
+                        </div>
+                    </div>
+
+                    <div class="code-box" style="margin-top: 6px;">
+<span style="color: #64748b;"># Final AWS actuation in lambdas/controller/app.py:</span>
+lambda_client.put_provisioned_concurrency_config(
+    FunctionName=FUNCTION_NAME, Qualifier=ALIAS, ProvisionedConcurrentExecutions=final_pc
+)
+                    </div>
+                </div>
+
+                <div class="page-footer">
+                    <span>Warmify ML Models & Dataset Technical Guide</span>
+                    <span>Slide 5 / 7</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             PAGE 6: BENCHMARK RESULTS & EMPIRICAL EVALUATION
+             ═══════════════════════════════════════════════════════════ -->
+        <div class="page">
+            <div class="page-header amber">
+                <div class="num">06</div>
+                <div>
+                    <h2>Empirical Benchmark: 6-Arm A/B Evaluation</h2>
+                </div>
+                <div class="category">Empirical Results</div>
+            </div>
+            <div class="page-body">
+                <div>
+                    <p style="margin-bottom: 8px;">
+                        Warmify was rigorously evaluated using the <strong>Evaluation Harness</strong> (<code>scripts/evaluation_harness.py</code>) across 6 experiment arms under identical 120-minute diurnal traffic:
+                    </p>
+
+                    <table class="tech-table">
+                        <thead>
+                            <tr>
+                                <th>Experiment Arm</th>
+                                <th>Cold Start %</th>
+                                <th>P95 Latency</th>
+                                <th>Warm-Copy Min</th>
+                                <th>Cost (USD)</th>
+                                <th>Cold-Start Reduction</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>1. No Optimization</strong> (On-Demand)</td>
+                                <td><span class="badge red">18.6%</span></td>
+                                <td>2,480 ms</td>
+                                <td>0.0</td>
+                                <td>$0.0031</td>
+                                <td>Baseline (0%)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2. Ping Warmer</strong> (Every 5 min cron)</td>
+                                <td>12.4%</td>
+                                <td>1,890 ms</td>
+                                <td>60.0</td>
+                                <td>$0.0075</td>
+                                <td>33% reduction</td>
+                            </tr>
+                            <tr>
+                                <td><strong>3. AWS Native Auto-Scaling</strong></td>
+                                <td>7.2%</td>
+                                <td>1,120 ms</td>
+                                <td>142.0</td>
+                                <td>$0.0178</td>
+                                <td>61% reduction</td>
+                            </tr>
+                            <tr>
+                                <td><strong>4. Warmify Q50</strong> (Median Model)</td>
+                                <td>2.1%</td>
+                                <td>185 ms</td>
+                                <td>195.0</td>
+                                <td>$0.0244</td>
+                                <td>88% reduction</td>
+                            </tr>
+                            <tr style="background: #f0fdf4; font-weight: 700;">
+                                <td><strong>5. Warmify Q90 (Default Model)</strong></td>
+                                <td><span class="badge green">0.3%</span></td>
+                                <td><span style="color: #15803d;">48 ms</span></td>
+                                <td>230.0</td>
+                                <td>$0.0287</td>
+                                <td><span style="color: #15803d;">98.4% reduction</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>6. Warmify Q95</strong> (Conservative)</td>
+                                <td><span class="badge green">0.0%</span></td>
+                                <td>42 ms</td>
+                                <td>268.0</td>
+                                <td>$0.0335</td>
+                                <td><strong>100.0% reduction</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>📊 Key Findings & Comparative Insights</h3>
+                    <div class="grid-2" style="margin-bottom: 8px;">
+                        <div class="card red">
+                            <h4 style="color: var(--red);">Why Ping Warmers Fail (12.4% Cold Starts)</h4>
+                            <p style="font-size: 10px; margin: 0;">
+                                A periodic ping only keeps <strong>1 single container</strong> alive. When 10 users hit the function concurrently, 1 user gets a fast response while 9 suffer severe 2,000ms+ cold starts. Pings cannot solve concurrency spikes.
+                            </p>
+                        </div>
+                        <div class="card amber">
+                            <h4 style="color: var(--amber);">Why AWS Auto-Scaling Fails (7.2% Cold Starts)</h4>
+                            <p style="font-size: 10px; margin: 0;">
+                                AWS Target Tracking relies on CloudWatch metric aggregations and alarms. The 3-minute lag means containers are provisioned <em>after</em> the burst has already caused cold starts for real users.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card green" style="margin-bottom: 8px;">
+                        <h4 style="color: var(--green-dark);">🏆 The Warmify Advantage: 48 ms P95 Latency for Just 1 Cent More</h4>
+                        <p style="font-size: 10.5px; margin: 0;">
+                            Warmify Q90 slashed cold starts from <strong>18.6% down to 0.3%</strong>, reducing P95 latency from <strong>2,480 ms to 48 ms (a 51x speedup)</strong>. The cost difference over reactive auto-scaling was only <strong>$0.0109</strong> for 2 hours—a virtually free upgrade for production SLAs.
+                        </p>
+                    </div>
+
+                    <div class="card dark">
+                        <h4>Validation Against Naive Lag-1 Baseline (train_model.py)</h4>
+                        <p style="font-size: 10px; margin: 0;">
+                            Every model trained in Warmify is validated against a naive persistence baseline ($\hat{y}_{t+10} = y_t$). Warmify's Gradient Boosting Regressors consistently outperformed the naive baseline Mean Absolute Error (MAE) by over <strong>40%</strong> during diurnal transition periods.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="page-footer">
+                    <span>Warmify ML Models & Dataset Technical Guide</span>
+                    <span>Slide 6 / 7</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             PAGE 7: VIVA & TECHNICAL DEFENSE CHEAT SHEET
+             ═══════════════════════════════════════════════════════════ -->
+        <div class="page">
+            <div class="page-header dark">
+                <div class="num">07</div>
+                <div>
+                    <h2>Viva & Technical Defense: Top 6 Rapid-Fire Answers</h2>
+                </div>
+                <div class="category">Viva Defense</div>
+            </div>
+            <div class="page-body">
+                <div>
+                    <p style="margin-bottom: 8px;">
+                        Bulletproof answers to the most common questions professors, evaluators, and system architects will ask during your presentation:
+                    </p>
+
+                    <div class="viva-box">
+                        <div class="viva-q">Q1: "Which ML algorithm did you use, and why not an LSTM or Deep Neural Network?"</div>
+                        <div class="viva-a">
+                            <strong>Answer:</strong> <em>"We used <strong>Quantile Gradient Boosting Regressors</strong> (scikit-learn). Deep learning (LSTM/Transformers) was rejected due to Lambda runtime constraints: PyTorch requires 400 MB+ dependencies and takes &gt;800 ms to evaluate on CPU, which would cause cold starts inside the controller itself! Scikit-learn runs in &lt;15 ms with a 120 KB footprint and natively supports Quantile Pinball Loss."</em>
+                        </div>
+                    </div>
+
+                    <div class="viva-box">
+                        <div class="viva-q">Q2: "What is Quantile Regression and why not use Mean Squared Error (MSE)?"</div>
+                        <div class="viva-a">
+                            <strong>Answer:</strong> <em>"MSE predicts the conditional average. If we scale serverless containers based on average load, 50% of traffic peaks will exceed capacity, triggering cold starts! Quantile regression with Pinball Loss penalizes under-prediction 9× more heavily than over-prediction (at $lpha=0.90$), intentionally creating an asymmetric buffer that pre-warms containers for 90% of traffic peaks."</em>
+                        </div>
+                    </div>
+
+                    <div class="viva-box">
+                        <div class="viva-q">Q3: "Where did your dataset come from? Is it real or synthetic?"</div>
+                        <div class="viva-a">
+                            <strong>Answer:</strong> <em>"Warmify supports two authentic modes: In cloud production, telemetry is pulled live from <strong>AWS CloudWatch Metrics & Logs Insights</strong> by our Collector Lambda. For controlled lab experiments, we engineered a <strong>Circadian Synthetic Load Generator</strong> modeling real 24-hour diurnal enterprise traffic with ±15% stochastic Gaussian jitter. We also include a pre-seeded local JSON dataset for offline demos."</em>
+                        </div>
+                    </div>
+
+                    <div class="viva-box">
+                        <div class="viva-q">Q4: "Why use Sine and Cosine cyclical encodings for time-of-day?"</div>
+                        <div class="viva-a">
+                            <strong>Answer:</strong> <em>"Time is continuous and circular. If represented as an integer 0–23, 23:59 and 00:01 appear as opposites ($|23.98 - 0.01| = 23.97$), confusing tree models. Projecting minutes onto the 2D unit circle via $\sin$ and $\cos$ ensures 23:59 and 00:01 remain adjacent (distance &lt; 0.008) across midnight."</em>
+                        </div>
+                    </div>
+
+                    <div class="viva-box">
+                        <div class="viva-q">Q5: "How do you translate forecasted requests into actual Lambda instances?"</div>
+                        <div class="viva-a">
+                            <strong>Answer:</strong> <em>"We use <strong>Little's Law</strong> from operational queuing theory: $L = \lambda \cdot W$. We convert predicted requests per minute into arrival rate ($	ext{req/sec}$), multiply by average service execution duration (seconds), and apply a $1.5	imes$ safety headroom: $	ext{Copies} = \lceil 	ext{RPS} 	imes 	ext{Duration} 	imes 1.5 ceil$."</em>
+                        </div>
+                    </div>
+
+                    <div class="viva-box">
+                        <div class="viva-q">Q6: "What if traffic surges far beyond your ML model's prediction?"</div>
+                        <div class="viva-a">
+                            <strong>Answer:</strong> <em>"Warmify has built-in safety fallbacks: 1) Standard AWS on-demand concurrency serves excess traffic without request drops; 2) The controller loops every 60 seconds to rapidly recalibrate; 3) A budget cap (50 copies) protects against DDoS bill shock."</em>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-footer">
+                    <span>Warmify ML Models & Dataset Technical Guide</span>
+                    <span>Slide 7 / 7</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

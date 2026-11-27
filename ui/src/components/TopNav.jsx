@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity, Settings, ShieldCheck, BarChart3 } from 'lucide-react';
+import { Activity, Settings, ShieldCheck, BarChart3, LogOut } from 'lucide-react';
 
 export default function TopNav({
   activeTab,
@@ -7,6 +7,7 @@ export default function TopNav({
   onOpenBenchmarks,
   onOpenConfig,
   onOpenHealth,
+  onLogout,
 }) {
   const tabs = [
     { id: 'overview', label: 'Pipeline' },
@@ -58,6 +59,13 @@ export default function TopNav({
           onClick={onOpenConfig}
         >
           <Settings size={14} />
+        </button>
+        <button
+          className="tool-circle-btn"
+          title="Logout"
+          onClick={onLogout}
+        >
+          <LogOut size={14} />
         </button>
         <div className="controller-badge" title="Warmify Predictive Concurrency Controller Active">
           <ShieldCheck size={13} style={{ marginRight: 4, color: 'var(--c-mint)' }} />

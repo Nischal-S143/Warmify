@@ -6,7 +6,7 @@ import path from 'path'
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: path.resolve(__dirname, '../frontend'),
+    outDir: path.resolve(import.meta.dirname, '../frontend'),
     emptyOutDir: true,
   },
   server: {
